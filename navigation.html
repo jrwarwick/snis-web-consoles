@@ -32,9 +32,12 @@
 				</div>
 				<div bp="grid margin-top--lg">
 					<div bp="9 offset-6">
+						<fieldset name="throttle">
+							<legend>THROTTLE</legend>
 						<button id="btn_throttle_up" data-cmd="THROTTLE UP">THROTTLE UP</button>
-						<button id="btn_reverse_thrust" data-cmd="REVERSE THRUST">REVERSE &tridot; THRUST</button>
+						<button id="btn_reverse_thrust" class="secondary" data-cmd="REVERSE THRUST">REVERSE &tridot; THRUST</button>
 						<button id="btn_throttle_down" data-cmd="THROTTLE UP">THROTTLE DOWN</button>
+						</fieldset>
 					</div>
 				</div>
 			</div>
@@ -43,12 +46,14 @@
 			</div>
 		</div>
 		<div class="panel">
-			<!-- perhaps this should be a CSI/SSI "navigation.nonsense.html_fragment" file ajax'd into the dom...-->
+			<!-- perhaps this should be a partialpage/client-injection (ajax'd into dom), or SSI, "navigation.nonsense.html_fragment" file ...-->
+			<!-- BEGIN CHUNK -->
 			<table>
 				<tr><td>alpha</td><td>beta</td><td>delta</td></tr>
 				<tr><td>01</td><td>03</td><td>05</td></tr>
 				<tr><td>02</td><td>04</td><td>06</td></tr>
 			</table>
+			<!-- END CHUNK -->
 		</div>
 	</body>
 	<script>
@@ -67,7 +72,7 @@
 			//sanitize data?
 			console.info("Transmitting command: "+text);
 
-			//fetch('/SHIP/NAVIGATION/THROTTLE/UP', {
+			//fetch('/SHIP/STATIONNAME/TARGETNOUN/VERB?parametername=value', {
 			fetch("/SHIP/NAVIGATION/" + text.toUpperCase().replace(" ","/"), {
 				method: 'POST', // or 'PUT'
 				headers: {
@@ -75,15 +80,15 @@
 				},
 				body: JSON.stringify(data),
 			})
-				.then(response => response.json())
-				.then(data => {
-					console.log('Success:', data);
-					soundACK.play();
-				})
-				.catch((error) => {
-					console.error('Error:', error);
-					soundNACK.play();
-				});
+			.then(response => response.json())
+			.then(data => {
+				console.log('Success:', data);
+				soundACK.play();
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+				soundNACK.play();
+			});
 		}
 
 		document.addEventListener('click', function (event) {
@@ -93,41 +98,17 @@
 				console.info("FYI: this element had a cmd attribute: " + event.target.dataset.cmd);
 				//todo: mild validation (alphanumeric+space?)
 				command(event.target.dataset.cmd);
+			} else {
+				console.error("ERROR: element did not contain recognized command data. Add data-cmd attribute in correct format to the control element tag.");
 			}
-			/*
-					switch (event.target.id) {
-						case "btn_rudder_port":
-							command("rudder left");
-							break;
-						case "btn_rudder_starboard":
-							command("rudder right");
-							break;
-						case "btn_elevator_up":
-							command("elevator up");
-							break;
-						case "btn_elevator_down":
-							command("elevator down");
-							break;
-						case "btn_throttle_up":
-							command("throttle up");
-							break;
-						case "btn_throttle_down":
-							command("throttle down");
-							break;
-						default:
-							if (event.target.id) {
-								console.error("ERROR: element ID not recognized. Add to the event handler switch.");
-							}
-					}
-			 */
 			// Log the clicked element in the console
 			console.log(event.target.tagName);
 		}, false);
 	</script>
 	<script src="./howler.js"></script>
 	<script>
-		var soundACK = new Howl({ src: ['./sound/tactinput_acknowledge.ogg', './sound/tactinput_acknowledge.m4a', './sound/tactinput_acknowledge.webm'] });
-		var soundNACK = new Howl({ src: ['./sound/tactinput_neg_acknowledge.ogg', './sound/tactinput_neg_acknowledge.m4a', './sound/tactinput_neg_acknowledge.webm'] });
+		var soundACK = new Howl({ src: ['./sounds/tactinput_acknowledge.ogg', './sounds/tactinput_acknowledge.m4a', './sounds/tactinput_acknowledge.webm'] });
+		var soundNACK = new Howl({ src: ['./sounds/tactinput_neg_acknowledge.ogg', './sounds/tactinput_neg_acknowledge.m4a', './sounds/tactinput_neg_acknowledge.webm'] });
 		try {
 			toggleFullScreen();
 		} catch (error) {
