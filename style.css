@@ -1,0 +1,410 @@
+/*! HTML5 Boilerplate v5.0 | MIT License | http://h5bp.com/ */
+
+html {
+    color: #222;
+    font-size: 1em;
+    line-height: 1.4;
+}
+
+::-moz-selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+
+::selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+audio,
+canvas,
+iframe,
+img,
+svg,
+video {
+    vertical-align: middle;
+}
+
+fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.browserupgrade {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}
+
+
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+
+/* coordinate with load link in html/
+font-family: 'Special Elite', cursive;
+font-family: 'Nova Square', cursive;
+font-family: 'Forum', cursive;
+font-family: 'Metamorphous', cursive;
+font-family: 'Iceland', cursive;
+*/
+
+body {
+        margin: 1.25em;
+        background-color: #152022;
+	font-family: 'Iceland', monospace;
+	/*font-family: "Nova Square", monospace;*/
+}
+
+main {
+color: white;
+}
+
+div.panel h1 {
+	font-size: 2em;
+	line-height: .95em;
+	color: #DDEEFF;
+	background:rgba(20,28,30,.90);
+	border: 2px solid #DDEEFF;
+	padding: 1.5em;
+	margin-top: -1.25em;
+	margin-left: auto;
+	margin-right: auto;
+	padding:.25em;
+	z-index: 10;
+}
+
+div.panel h2,h4 {
+	line-height:1em;
+	padding:0;
+	margin: 0em 0em .5em 0em;
+}
+
+div.panel {
+/*
+	min-width:500px;
+*/
+	min-width:20em;
+	max-width:36em;
+/*
+	background: url("../img/TLP_comm_bg.png") no-repeat center center;
+	background-size: 100% 100%;
+*/
+	/*background-size: cover;*/
+	font-size: 2em;
+	color: #DDEEFF;
+	border: 1px solid #DDEEFF;
+	padding: 1em;
+	z-index: 5;
+} 
+div.panel button {
+	background: #253550;
+	border-radius: 10px;
+	border: 2px solid #A0CCE0;
+	padding-left: .25em; padding-right:.25em;
+}
+div.panel input {
+	background: #253550;
+	border-radius: 10px;
+	border: 2px solid #A0CCE0;
+  border-left: 5px solid #A0CCE0;
+	padding-left: .25em; padding-right:.25em;
+  padding-top: .25em; padding-bottom:.25em;
+}
+div.panel p.description {
+	line-height: .9em;
+	margin-left:  1em;
+	margin-right: 1em;
+	text-align:justify;
+}
+
+#bigdisplay {
+	margin-bottom: .5em;
+	margin-top: .5em;
+	text-align:right;
+/* works great except in ipad mini portrait
+	position:absolute;
+	top: .25em; right: .5em;
+*/
+	font-size: 5em;
+	line-height: .5em;
+}
+
+#primaryMessage {
+	background:rgba(20,28,30,.75);
+	border-collapse: separate;
+	border-spacing: 0;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	border: 1px solid #88CCDA;
+	padding: .25em;
+}
+#primaryMessage p {
+	text-align:justify;
+	margin-top: 0em;
+}
+
+#gameparameters {
+	background:rgba(20,28,30,.75);
+	border-collapse: separate;
+	border-spacing: 0;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	border: 1px solid #88CCDA;
+	padding: .25em;
+
+	list-style-type: none;
+}
+/* if you go the UL way...
+#gameparameters li {
+	margin-bottom: 0em;
+	padding: 0em;
+	line-height: .90em;
+}
+#gameparameters > li > span {
+	padding-left: 1em;
+}
+*/
+#gameparameters tr {
+	margin-bottom: 0em;
+	padding: 0em;
+	line-height: .95em;
+}
+#gameparameters td {
+	padding-left: 1em;
+}
+#gameparameters > td > span {
+	padding-left: 1em;
+}
+#gameparameters td button{
+	width:2em; height:1em;
+	line-height: .75em;
+	/*
+	padding-left:  .75em;
+	padding-right: .75em;
+	*/
+	padding:0;
+	font-size:  .75em;
+	margin-right: 1em;
+}
+
+#rulebook {
+	display:none;
+}
+#formatrules {
+	padding: .25em;
+	line-height: .90;
+	font-size:  .75em;
+}
+#formatrules ul {
+	list-style-type: none;
+	padding:0;
+	margin: 1em 2em 1em 2em;
+}
+#formatrules ul li{
+	text-align:justify;
+}
+#formatrules ul li p{
+	margin-bottom:.5em;
+	margin-top:.25em;
+	padding-bottom: 0;
+}
+#formatrules h4 {
+	line-height: .90;
+	margin: 0em 0em .25em 0em;
+	padding:0;
+}
+
+#btnCredits {
+	position:fixed;
+	bottom:0; right:0;
+	font-size: .8em;
+	line-height: 1em;
+	color: #DDEEFF;
+	background:rgba(20,28,30,.90);
+	border: 1px solid #DDEEFF;
+}
+#credits {
+	display:none;
+	background:rgba(20,28,30,.90);
+	border: 2px solid #DDEEFF;
+	color: #DDEEFF;
+	font-size:1.5em;
+	line-height: .9em;
+	margin-top:4em;
+	margin-left:1em;
+	margin-right: 1em;
+	padding: 2em;
+	text-align:justify;
+
+	top:15%; left:15%; position: absolute;
+	width: 70%;
+}
+
+
+div.clue {
+	margin:0px;
+	padding:35px 20px 25px 20px;
+        width:440px;
+        height:580px;
+        background-image:url('/puzzle/img/ancientparchment.png');
+	/* font-family: 'Special Elite', cursive;*/
+	font-size: 1.25em;
+}
+div.clue p {
+	margin:0em 0em 1em 0em;
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+/* ==========================================================================
+   Media Queries
+   ========================================================================== */
+
+@media only screen and (min-width: 35em) {
+
+}
+
+@media print,
+       (-o-min-device-pixel-ratio: 5/4),
+       (-webkit-min-device-pixel-ratio: 1.25),
+       (min-resolution: 120dpi) {
+
+}
+
+/* ==========================================================================
+   Helper classes
+   ========================================================================== */
+
+.hidden {
+    display: none !important;
+    visibility: hidden;
+}
+
+.visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+.clearfix {
+    *zoom: 1;
+}
+
+/* ==========================================================================
+   Print styles
+   ========================================================================== */
+
+@media print {
+    *,
+    *:before,
+    *:after {
+        background: transparent !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    a,
+    a:visited {
+        text-decoration: underline;
+    }
+
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+
+    a[href^="#"]:after,
+    a[href^="javascript:"]:after {
+        content: "";
+    }
+
+    pre,
+    blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+
+    img {
+        max-width: 100% !important;
+    }
+
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+}
