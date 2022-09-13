@@ -91,7 +91,7 @@ static void request_handler(struct mg_connection *c, int ev, void *ev_data, void
 		/*todo:stat /tmp/snis-natural-language-fifo , resp: "ctrl offline" if missing */
 		/*todo:restrict referrer to this host? cors?*/
 		if (mg_http_match_uri(hm, "/CMD/QUIT")) {
-			mg_http_reply(c, 200, "", "{\"result\": %d}\n", 123);  /*TODO:  quit/restart?*/
+			mg_http_reply(c, 202, "", "{\"result\": %d}\n", 123);  /*TODO:  quit/restart?*/ 
 		} else if (mg_http_match_uri(hm, "/api/f2/*")) {
 			mg_http_reply(c, 200, "", "{\"result\": \"%.*s\"}\n", (int) hm->uri.len, hm->uri.ptr);
 		} else if (mg_http_match_uri(hm, "/SHIP/NAVIGATION/*/*")) {  /* Serve pseudo-RESTfully */
@@ -102,7 +102,6 @@ static void request_handler(struct mg_connection *c, int ev, void *ev_data, void
 			snprintf(control_spec, (int)hm->uri.len+1, hm->uri.ptr, "(%s)\n");
 			fprintf(stdout, "  [CMD]:%s\n", control_spec);
 
-			/*insert_fifo_message("throttle x");*/
 			insert_fifo_message(control_spec);
 			mg_http_reply(c, 200, "", "{\"command\": \"%.*s\",\"result\": \"ACK\"}\n",
 					(int) hm->uri.len, hm->uri.ptr);

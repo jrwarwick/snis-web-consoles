@@ -1,0 +1,4 @@
+div[bp~="text-right"] > button {
+	text-align: right;
+}
+

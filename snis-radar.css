@@ -1,0 +1,29 @@
+   div.radar {
+	box-sizing: border-box;
+}
+
+.radar {
+	  width: 4em;
+	    height: 4em;
+	     background: url(https://tushkiz.github.io/img/pattern.png) #000;
+						/* 
+		background: url(https://tushkiz.github.io/img/pattern.png), url(https://tushkiz.github.io/img/world-map.gif);
+		    background: url(https://ih1.redbubble.net/image.1070875778.8411/flat,128x128,075,t-pad,128x128,f8f8f8.jpg);
+						 */
+		border: 1px solid green;
+		border-radius: 50%;
+		overflow: hidden;
+	}
+.waveguide {
+	background-image: linear-gradient(225deg, green 15%, transparent 70%);
+	height: 2em;
+	width: 2em;
+	border-right: 1px solid green;
+	  transform-origin: bottom right;
+	    transform: rotate(0deg) skew(45deg,0);
+	      animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+	  to { transform: rotate(360deg) skew(45deg,0); }
+}

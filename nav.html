@@ -15,6 +15,7 @@
 		<link href="/snis-blueprint.css" rel="stylesheet" />
 
 		<link rel="stylesheet" href="/snis-basic.css" type="text/css">
+		<link rel="stylesheet" href="/snis-radar.css" type="text/css">
 	</head>
 	<body>
 		<div class="panel">
@@ -46,15 +47,21 @@
 				<button id="btn_rudder_starboard" data-cmd="RUDDER STARBOARD">RUDDER STARBOARD &blacktriangleright;</button>
 			</div>
 		</div>
-		<div class="panel">
-			<!-- perhaps this should be a partialpage/client-injection (ajax'd into dom), or SSI, "navigation.nonsense.html_fragment" file ...-->
-			<!-- BEGIN CHUNK -->
-			<table>
-				<tr><td>Inertial Compensator</td><td>Aspect</td><td>Delta</td></tr>
-				<tr><td>01</td><td>03</td><td>05</td></tr>
-				<tr><td>02</td><td>04</td><td>06</td></tr>
-			</table>
-			<!-- END CHUNK -->
+		<div bp="grid">
+			<div bp="4">STATUS:&nbsp;NOMINAL</div>
+			<div class="panel" bp="4">
+				<!-- perhaps this should be a partialpage/client-injection (ajax'd into dom), or SSI, "navigation.nonsense.html_fragment" file ...-->
+				<!-- BEGIN CHUNK -->
+				<table>
+					<tr><td>Inertial Comp.</td><td>Aspect</td><td>Delta</td></tr>
+					<tr><td>01</td><td>03</td><td>05</td></tr>
+					<tr><td>02</td><td>04</td><td>06</td></tr>
+				</table>
+				<!-- END CHUNK -->
+			</div>
+			<div class="radar" bp="4 text-right float-center">
+				  <div class="waveguide"></div>
+			</div>
 		</div>
 	</body>
 	<script>

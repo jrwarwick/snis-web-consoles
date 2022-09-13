@@ -1,11 +1,13 @@
 # SNiS Client Bridge/proxy over HTTP
 
 Provide a way for Space Nerds in Space to have "mobile-first/responsive" html5 client UI (but with limited control options, depends on what the speech bridge already can do) 
-so tablets, mobile telephones, and sundry hybrid-touchscreen-PCs (not already running linux) can easily get into the mix of client consoles, plus if we do a good job with good-practices CSS, we get easy-ish reskinning of those clients (LCARS, anyone? then a quick switch to Star XYZ/et cetera). Kind of get real/active Trek-style "PADD" mobile devices, too.
+so tablets, mobile telephones, and sundry hybrid-touchscreen-PCs (not already running linux), and even [chuckle] big gaming consoles (using the built-in webrowsers) can easily get into the mix of client consoles, plus if we do a good job with good-practices CSS, we get easy-ish reskinning of those clients (LCARS, anyone? then a quick switch to Star XYZ/et cetera). Kind of get real/active Trek-style "PADD" mobile devices, too.
 
 Mostly we this is just taking advantage of the clever /computer interface by injection into /tmp/snis-natural-language-fifo (a named pipe which the client reads from) stuff the reflects what such a button would mean to do. E.g., Throttle Up button sends a "THROTTLE UP" "command" back to this little bridge which just writes into the FIFO, and voila, the button caused throttle to go up.
 
 Side-note: each game client's hostname suddenly becomes a potential URL. Or this could be running only on the server.
+
+references: https://github.com/smcameron/space-nerds-in-space/blob/master/doc/hacking-space-nerds-in-space.html#guiwidget
 
 ## Setup
     clone https://github.com/jrwarwick/snis-web-consoles.git
@@ -15,6 +17,9 @@ Side-note: each game client's hostname suddenly becomes a potential URL. Or this
     make
 
 ## ToDo:
+
+### Direct CMDs implementation
+particularly  /CMD/QUIT to shutdown entirely
 
 ### Makefile install target
 would not be necessary in this spearate project if adopted upstream by parent project.
