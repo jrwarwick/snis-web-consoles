@@ -122,5 +122,20 @@
 		} catch (error) {
 			console.warn("just warning, kinda expected this..." + error);
 		}
+
+
+		function faux_mutation() {
+			var row = Math.floor(Math.random() * 2) + 2;
+			var col = Math.floor(Math.random() * 3) + 1;
+			var dd = document.querySelector("body > div:nth-child(3) > div.panel > table > tbody > tr:nth-child("+row+") > td:nth-child("+col+")");
+			dd.innerText = (Math.floor(dd.innerText) * Math.floor(Math.random() * 99) ) % 999 + (Math.floor(Math.random() * 100)/10);
+			//quasi-recursion
+			var tmr = setTimeout(function() {
+				faux_mutation();
+			},1000*Math.floor(Math.random() * 12));
+		}
+
+		faux_mutation();
+
 	</script>
 </html>
