@@ -280,6 +280,25 @@ button.bar {
   )
 }
 
+a.buttonize {
+    font-family: 'Tomorrow', 'Orbitron', Arial, Helvetica, sans-serif;
+    font-size: 1.5em;
+    vertical-align: bottom;
+    color: #22DD22;
+    background-color: #020402;
+    border-top: 1px solid #22DD22;
+    border-right: 1px solid #22DD22;
+    border-bottom: 1px solid #22DD22;
+    border-left: 1px solid #22DD22;
+    border-radius: .2em;
+    padding: .25em 1em .25em 2em;
+    text-align: right;
+    padding-top: 0em;
+    padding-bottom: 0em;
+    box-shadow: i;
+    text-decoration: none;
+}
+
 
 /** Sliders **/
 input[type='range'] {

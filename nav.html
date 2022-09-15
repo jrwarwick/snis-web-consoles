@@ -4,6 +4,7 @@
 		<meta charset="utf-8"/>
 		<title>NAVIGATION</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="manifest" href="manifest.json">
 		<!-- <link rel="stylesheet" type="text/css" href="https://unpkg.com/augmented-ui@2/augmented-ui.min.css"> -->
 		<link href="https://fonts.googleapis.com/css?family=Iceland" rel="stylesheet" type="text/css"> 
 		<!--
@@ -48,7 +49,10 @@
 			</div>
 		</div>
 		<div bp="grid">
-			<div bp="4">STATUS:&nbsp;NOMINAL</div>
+			<div bp="4">
+				<div> STATUS:&nbsp;NOMINAL </div>
+				<div> <a class="buttonize" href="menu.html">MAIN MENU</a></div>
+			</div>
 			<div class="panel" bp="4">
 				<!-- perhaps this should be a partialpage/client-injection (ajax'd into dom), or SSI, "navigation.nonsense.html_fragment" file ...-->
 				<!-- BEGIN CHUNK -->

@@ -27,7 +27,7 @@ would not be necessary in this spearate project if adopted upstream by parent pr
 ### main index.html that is also a menu 
 that lists all the client interfaces in a nice layout.
 
-also maybe some fun/cool QR code , Chirp, TTS, IRC/XMLPP broadcasts etc to announce the "client ui" URL. 
+also maybe some fun/cool QR code , Chirp, TTS, IRC/XMLPP broadcasts etc to announce/share/spawn/clone the "client UI" URL. 
 At least dump it on the console or something. notify-send mabye?  https://community.linuxmint.com/tutorial/view/2177
 
 ### manifest.json & favicon stuff
