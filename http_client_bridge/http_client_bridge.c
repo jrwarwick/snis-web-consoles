@@ -77,6 +77,13 @@ static void request_handler(struct mg_connection *c, int ev, void *ev_data, void
 	 * http://foo.bar/ASTRISK/NAVIGATION/RUDDER/-1
 	 * http://foo.bar/ASTRISK/SCIENCE/LRS/PULSE
 	 */
+	/*
+	 * We'll serve URIs in a kind of pseudo-RESTful style.
+	 * Initially lets limit the URI/endpoint-paths to match known and documented commands.
+	 * We could have a blind transmission of cmd-data through the bridge,
+	 * but this would mean we could not send back an error message and then the client
+	 * is ignorant of whether a recognized cmd was sent (no chance to have error sfx )
+	 */
 	char control_spec[100];
 
 	if (ev == MG_EV_ACCEPT && request_data != NULL) {
@@ -94,7 +101,7 @@ static void request_handler(struct mg_connection *c, int ev, void *ev_data, void
 			mg_http_reply(c, 202, "", "{\"result\": %d}\n", 123);  /*TODO:  quit/restart?*/ 
 		} else if (mg_http_match_uri(hm, "/api/f2/*")) {
 			mg_http_reply(c, 200, "", "{\"result\": \"%.*s\"}\n", (int) hm->uri.len, hm->uri.ptr);
-		} else if (mg_http_match_uri(hm, "/SHIP/NAVIGATION/*/*")) {  /* Serve pseudo-RESTfully */
+		} else if ( mg_http_match_uri(hm, "/SHIP/NAVIGATION/*/*")||mg_http_match_uri(hm, "/SHIP/WEAPONS/*/*") ) {  /* Serve pseudo-RESTfully */
 			/*strlcpy(control_spec,&hm->uri[5],*/
 			/* copy string, strip /SHIP/ prefix, uppercase,
 			 * remove anything not [A-Z/], replace '/' with ' ', send to NL fifo.
@@ -132,9 +139,11 @@ int main(int argc, char **argv)
 	mg_mgr_init(&mgr);   /* Initialise event manager */
 	mg_http_listen(&mgr, s_http_addr, request_handler, NULL);    /* Create HTTP listener */
 	mg_http_listen(&mgr, s_https_addr, request_handler, (void *) 1);  /* HTTPS listener  */
+
+	fprintf(stdout, "%s http process launch, serving on: %s\n", argv[0], s_http_addr);
+
 	/*todo: does this need graceful exit via signals and keyboard? */
 	/* Infinite event loop: */
-
 	for (;;) {
 		mg_mgr_poll(&mgr, 1000);
 	}

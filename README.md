@@ -1,20 +1,27 @@
 # SNiS Client Bridge/proxy over HTTP
 
-Provide a way for Space Nerds in Space to have "mobile-first/responsive" html5 client UI (but with limited control options, depends on what the speech bridge already can do) 
-so tablets, mobile telephones, and sundry hybrid-touchscreen-PCs (not already running linux), and even [chuckle] big gaming consoles (using the built-in webrowsers) can easily get into the mix of client consoles, plus if we do a good job with good-practices CSS, we get easy-ish reskinning of those clients (LCARS, anyone? then a quick switch to Star XYZ/et cetera). Kind of get real/active Trek-style "PADD" mobile devices, too.
+This is a supplemental utility for the excellent multi-player starship bridge simulator "Space Nerds in Space". The intention is to provide a way for Space Nerds in Space to add an option for "mobile-first/responsive" html5 game client UI (but with limited control options, depending on what the built-in speech bridge feature already can do) 
+so tablets, mobile telephones, and sundry hybrid-touchscreen-PCs (whether or not they are already running linux), and even potentially dedicated gaming consoles (modern ones using the now pretty common built-in webrowsers) can easily get into the mix of client consoles. Plus: if we do a good job with clean, well designed html/CSS, we get easy-ish reskinning of those clients (LCARS, anyone?). You could possibly just have a menu to instantly refresh page in the style of Star [Trek/Wars/Craft/Punk/etc]. Aside from supplemental bridge control screens, you kind of get functional Trek-style "PADD" mobile devices, too.
 
-Mostly we this is just taking advantage of the clever /computer interface by injection into /tmp/snis-natural-language-fifo (a named pipe which the client reads from) stuff the reflects what such a button would mean to do. E.g., Throttle Up button sends a "THROTTLE UP" "command" back to this little bridge which just writes into the FIFO, and voila, the button caused throttle to go up.
+Mostly this project is just taking advantage of the clever "/computer" command interface by injection into /tmp/snis-natural-language-fifo (a named pipe which the SNiS game client reads from). So each button must map to one of those already supported commands. E.g., Throttle Up button sends a "THROTTLE UP" "command" back to this little bridge which just writes into the FIFO, and voila, the button caused throttle to go up.
 
-Side-note: each game client's hostname suddenly becomes a potential URL. Or this could be running only on the server.
+Side-note: each game client's hostname suddenly becomes a potential URL. Or perhaps this bridge utility would only be running only on the server.
 
-references: https://github.com/smcameron/space-nerds-in-space/blob/master/doc/hacking-space-nerds-in-space.html#guiwidget
+references:
+ - https://github.com/smcameron/space-nerds-in-space/blob/master/doc/hacking-space-nerds-in-space.html#guiwidget
+ - https://smcameron.github.io/space-nerds-in-space/index.html#comcontrols
 
 ## Setup
     clone https://github.com/jrwarwick/snis-web-consoles.git
     cd snis-web-consoles/
+    # Assumes you already have a locally installed SNiS client so we can serve up sounds. Otherwise, you will need to supply your own sounds named according to what the html expects.
     ln -s /usr/local/share/snis/sounds/ ./sounds
     cd http_client_bridge/
     make
+
+    # And now, once you already have your SNiS running (because we need that FIFO), start the http bridge process:
+    ./http_client_bridge/snis_http_bridge
+    # And navigate to http://${HOSTNAME}:8000/ in your preferred web-browsing device.
 
 ## ToDo:
 

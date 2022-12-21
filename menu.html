@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>MAIN MENU</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="https://fonts.googleapis.com/css?family=Iceland" rel="stylesheet" type="text/css"> 
+		<!--
+	  <link rel="stylesheet" href="/normalize.css" type="text/css">
+	  <link rel="stylesheet" href="/style.css" type="text/css">
+	  <link rel="stylesheet" href="/snis-sbs-ui.css" type="text/css">
+		-->
+		<link href="/blueprint.css" rel="stylesheet" />
+		<link href="/snis-blueprint.css" rel="stylesheet" />
+
+		<link rel="stylesheet" href="/snis-basic.css" type="text/css">
+	<style>
+		table.details{ margin-top:2em;}
+		a.buttonize {
+			margin-bottom: .5em;
+			min-width: 12em;
+			width: 12em;
+			display: block;
+			text-align: left;
+			margin-left: 1em;
+		}
+	</style>
+	</head>
+	<body>
+		<div id="main" bp="grid">
+			<div>
+				<div class="panel">
+					<h1 onClick="toggleFullScreen();">MAIN MENU</h1>
+				</div>
+				<a id="a_launch_nav" href="./nav.html" class="buttonize">NAVIGATION</a>
+				<a id="a_launch_sci" href="./sci.html" class="buttonize">SCIENCE</a>
+				<a id="a_launch_wep" href="./wep.html" class="buttonize">WEAPONS</a>
+				<a id="a_launch_comm" href="./comm.html" class="buttonize">COMMUNICATIONS</a>
+				<div class="panel">
+					<!-- perhaps this should be a partialpage/client-injection (ajax'd into dom), or SSI, "navigation.nonsense.html_fragment" file ...-->
+					<!-- BEGIN CHUNK -->
+					<table class="details">
+						<tr><th>STATION ID</th><th>OPSEC CODE</th></tr>
+						<tr><td>01</td><td>0307</td></tr>
+						<tr><td>02</td><td>2600</td></tr>
+					</table>
+					<!-- END CHUNK -->
+				</div>
+			</div>
+		</div>
+	</body>
+	<script>
+		function toggleFullScreen() {
+			if (!document.fullscreenElement) {
+				document.documentElement.requestFullscreen();
+			} else {
+				if (document.exitFullscreen) {
+					document.exitFullscreen();
+				}
+			}
+		}
+
+		function command(text) {
+			var data = { command: text };
+			//sanitize data?
+			console.info("Transmitting command: "+text);
+
+			//fetch('/SHIP/STATIONNAME/TARGETNOUN/VERB?parametername=value', {
+			fetch("/SHIP/NAVIGATION/" + text.toUpperCase().replace(" ","/"), {
+				method: 'POST', // or 'PUT'
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+			})
+			.then(response => response.json())
+			.then(data => {
+				console.log('Success:', data);
+				soundACK.play();
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+				soundNACK.play();
+			});
+		}
+
+	</script>
+	<script src="./howler.js"></script>
+	<script>
+		var soundACK = new Howl({ src: ['./sounds/tactinput_acknowledge.ogg', './sounds/tactinput_acknowledge.m4a', './sounds/tactinput_acknowledge.webm'] });
+		var soundNACK = new Howl({ src: ['./sounds/tactinput_neg_acknowledge.ogg', './sounds/tactinput_neg_acknowledge.m4a', './sounds/tactinput_neg_acknowledge.webm'] });
+		try {
+			toggleFullScreen();
+		} catch (error) {
+			console.warn("just warning, kinda expected this..." + error);
+		}
+	</script>
+</html>

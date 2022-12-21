@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8"/>
-		<title>NAVIGATION</title>
+		<title>WEAPONS</title>
 		<!-- 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -25,32 +25,33 @@
 	</head>
 	<body>
 		<div class="panel">
-			<h1 onClick="toggleFullScreen();">NAVIGATION</h1>
+			<h1 onClick="toggleFullScreen();">WEAPONS</h1>
 		</div>
 		<div id="main" bp="grid">
 			<div class="panel" bp="3">
-				<button id="btn_rudder_port" class="XXfoob" data-cmd="RUDDER PORT">RUDDER <br/>&blacktriangleleft; PORT</button>
+				<button id="btn_cannon_port" class="XXfoob" data-cmd="CANNON PORT">CANNON <br/>&blacktriangleleft; PORT</button>
 			</div>
 			<div class="panel" bp="6">
 				<div bp="grid">
 					<div bp="6 offset-4 text-center">
-						<button id="btn_elevator_up" class="XXXbar" data-cmd="ELEVATOR UP">ELEVATOR &blacktriangle; UP</button>
-						<button id="btn_elevator_down" data-cmd="ELEVATOR DOWN">ELEVATOR &blacktriangledown; DOWN</button>
+						<button id="btn_cannon_up" class="XXXbar" data-cmd="CANNON UP">CANNON &blacktriangle; UP</button>
+						<button id="btn_cannon_down" data-cmd="CANNON DOWN">CANNON &blacktriangledown; DOWN</button>
 					</div>
 				</div>
 				<div bp="grid margin-top--lg">
 					<div bp="6 offset-4">
+						<input type="range" class="horizontal" />
 						<fieldset name="throttle">
-							<legend>THROTTLE</legend>
-						<button id="btn_throttle_up" data-cmd="THROTTLE UP">THROTTLE UP</button>
-						<button id="btn_reverse_thrust" class="secondary" data-cmd="REVERSE THRUST">REVERSE &tridot; THRUST</button>
-						<button id="btn_throttle_down" data-cmd="THROTTLE DOWN">THROTTLE DOWN</button>
+							<legend>FIRE CONTROL</legend>
+						<button id="btn_fire_phasers" data-cmd="FIRE PHASERS">PHASERS</button>
+						<button id="btn_arm" class="secondary" XXdata-cmd="SAY WEAPON SYSTEMS ARMED">ARM &tridot; WEAPON SYSTEMS</button>
+						<button id="btn_fire_torpedoes" data-cmd="FIRE TORPEDOES">TORPEDOES</button>
 						</fieldset>
 					</div>
 				</div>
 			</div>
 			<div class="panel" bp="3 text-right">
-				<button id="btn_rudder_starboard" data-cmd="RUDDER STARBOARD">RUDDER STARBOARD &blacktriangleright;</button>
+				<button id="btn_cannon_starboard" data-cmd="CANNON STARBOARD">CANNON STARBOARD &blacktriangleright;</button>
 			</div>
 		</div>
 		<div bp="grid">
@@ -63,7 +64,7 @@
 				<!-- perhaps this should be a partialpage/client-injection (ajax'd into dom), or SSI, "navigation.nonsense.html_fragment" file ...-->
 				<!-- BEGIN CHUNK -->
 				<table>
-					<tr><th>Inertial Comp.</th><th>Aspect</th><th>Delta</th></tr>
+					<tr><th>W/Rel-v</th><th>Delta-a</th><th>Delta-v</th></tr>
 					<tr><td>01</td><td>03</td><td>05</td></tr>
 					<tr><td>02</td><td>04</td><td>06</td></tr>
 				</table>
@@ -91,7 +92,7 @@
 			console.info("Transmitting command: "+text);
 
 			//fetch('/SHIP/STATIONNAME/TARGETNOUN/VERB?parametername=value', {
-			fetch("/SHIP/NAVIGATION/" + text.toUpperCase().replace(" ","/"), {
+			fetch("/SHIP/WEAPONS/" + text.toUpperCase().replace(" ","/"), {
 				method: 'POST', // or 'PUT'
 				headers: {
 					'Content-Type': 'application/json',
@@ -148,8 +149,49 @@
 				faux_mutation();
 			},1000*Math.floor(Math.random() * 12));
 		}
+		function faux_highlight() {
+			var row = Math.floor(Math.random() * 2) + 2;
+			var col = Math.floor(Math.random() * 3) + 1;
+			var dd = document.querySelector("body > div:nth-child(3) > div.panel > table > tbody > tr:nth-child("+row+") > td:nth-child("+col+")");
+			dd.classList.toggle("highlight");
+			//TODO: probably need unique cartesian grid-id action here....
+			var tmr1= setTimeout(function(ddd) { ddd.classList.toggle("highlight"); }, 600, dd);
+			var tmr2 = setTimeout(function(ddd) { ddd.classList.toggle("highlight"); }, 1300, dd);
+			var tmr3 = setTimeout(function(ddd) { ddd.classList.toggle("highlight"); }, 2000, dd);
+			var tmr2 = setTimeout(function(ddd) { ddd.classList.toggle("highlight"); }, 2600, dd);
+			var tmr3 = setTimeout(function(ddd) { ddd.classList.toggle("highlight"); }, 3500, dd);
+
+			//TODO: sometimes, do a contagion-style lightup of the whole row instead.
+
+			//quasi-recursion
+			var blinkyDelay = 1000*Math.floor(Math.abs(Math.random() * 90 - Math.random() * 10));
+			console.info((blinkyDelay/1000) + "s until next blinky fauxh highlight.");
+			var tmr = setTimeout(function() {
+				faux_highlight();
+			}, blinkyDelay);
+		}
 
 		faux_mutation();
+		faux_highlight();
 
+		document.addEventListener("DOMContentLoaded", function() {
+			  // code...
+			document.querySelector("#btn_fire_phasers").setAttribute("disabled","true");
+			document.querySelector("#btn_fire_torpedoes").setAttribute("disabled","true");
+			//styling/classes too?
+		});
+		document.getElementById("btn_arm").addEventListener("click", function(event) {
+			if (event.target.innerText.startsWith("ARM")){
+				document.querySelector("#btn_fire_phasers").removeAttribute("disabled");
+				document.querySelector("#btn_fire_torpedoes").removeAttribute("disabled");
+				event.target.innerText = "DIS" + event.target.innerText;
+			} else {
+				document.querySelector("#btn_fire_phasers").setAttribute("disabled","true");
+				document.querySelector("#btn_fire_torpedoes").setAttribute("disabled","true");
+				event.target.innerText = event.target.innerText.replace("DIS","");
+			}
+		});
+
+		
 	</script>
 </html>
