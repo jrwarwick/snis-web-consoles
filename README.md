@@ -1,11 +1,21 @@
 # SNiS Client Bridge/proxy over HTTP
 
-This is a supplemental utility for the excellent multi-player starship bridge simulator "Space Nerds in Space". The intention is to provide a way for Space Nerds in Space to add an option for "mobile-first/responsive" html5 game client UI (but with limited control options, depending on what the built-in speech bridge feature already can do) 
-so tablets, mobile telephones, and sundry hybrid-touchscreen-PCs (whether or not they are already running linux), and even potentially dedicated gaming consoles (modern ones using the now pretty common built-in webrowsers) can easily get into the mix of client consoles. Plus: if we do a good job with clean, well designed html/CSS, we get easy-ish reskinning of those clients (LCARS, anyone?). You could possibly just have a menu to instantly refresh page in the style of Star [Trek/Wars/Craft/Punk/etc]. Aside from supplemental bridge control screens, you kind of get functional Trek-style "PADD" mobile devices, too.
+This is a supplemental game client utility for the excellent multi-player starship bridge simulator ["Space Nerds in Space"](https://smcameron.github.io/space-nerds-in-space/). The intention is to allow Space Nerds in Space to offer an option for "mobile-first/responsive" html5/css/js based game client UI. Necessarily, these will be limited in control options, depending on what the built-in speech bridge feature already can do, and probably never have any "real" feedback.
+With that, tablets, mobile telephones, and sundry hybrid-touchscreen-PCs (whether or not they are already running linux), and even potentially dedicated gaming consoles (modern ones using the now pretty common built-in webrowsers) can easily get into the mix of client consoles. Plus: if we do a good job with clean, well designed html/CSS, we get easy-ish reskinning of those clients (LCARS, anyone?). You could possibly just have a menu to instantly refresh page in the style of Star [Trek/Wars/Craft/Punk/etc]. Aside from supplemental bridge control screens, you kind of get functional Trek-style "PADD" mobile devices, too. Perhaps with some additional hackery, this could also be a way to give some kinds of side-channel/secondary functionality to a console. E.g., access to some kind of on-board encyclopedia, "decryption" tools, crew and cargo manifests, invocations of other RESTful APIs such as home-automation lighting, one-off mission-based "settings", one-off mission-based clues (that maybe are coordinated with prompts by main game script)  etc.
 
 Mostly this project is just taking advantage of the clever "/computer" command interface by injection into /tmp/snis-natural-language-fifo (a named pipe which the SNiS game client reads from). So each button must map to one of those already supported commands. E.g., Throttle Up button sends a "THROTTLE UP" "command" back to this little bridge which just writes into the FIFO, and voila, the button caused throttle to go up.
 
 Side-note: each game client's hostname suddenly becomes a potential URL. Or perhaps this bridge utility would only be running only on the server.
+
+A supplemental expansion to this project:
+Pi Pico W + GPIO + assorted electronics components 
++ https://docs.circuitpython.org/en/latest/shared-bindings/digitalio/index.html 
++ https://docs.circuitpython.org/en/latest/shared-bindings/mdns/index.html + https://docs.circuitpython.org/projects/requests/en/latest/api.html
+(or just an out-of-the-box Pi Zero W) 
+= fun and fancy physical control panel that takes advantage of this same bridge (because toggling a physical switch is read by pi gpio which then resolves snis-server.local and uses Requests library to send a "RESTful" CMD to the http_bridge process which feeds it to the fifo).
+
+But then again, Pi Pico has USB HID, so it can pretend to be a keyboard, which might be a /lot/ simpler than all that.
+
 
 references:
  - https://github.com/smcameron/space-nerds-in-space/blob/master/doc/hacking-space-nerds-in-space.html#guiwidget
@@ -26,10 +36,12 @@ references:
 ## ToDo:
 
 ### Direct CMDs implementation
-particularly  /CMD/QUIT to shutdown entirely
+particularly  /CMD/QUIT to shutdown the http bridge process entirely
+/CMD/ANNOUNCE to place a popup modal div on all connected clients with arbitrary message. Sanitization considerations.
 
 ### Makefile install target
-would not be necessary in this spearate project if adopted upstream by parent project.
+Would not be necessary in this spearate project if adopted upstream by parent project.
+Maybe also special target for audio asset symlinking
 
 ### main index.html that is also a menu 
 that lists all the client interfaces in a nice layout.
@@ -38,21 +50,23 @@ also maybe some fun/cool QR code , Chirp, TTS, IRC/XMLPP broadcasts etc to annou
 At least dump it on the console or something. notify-send mabye?  https://community.linuxmint.com/tutorial/view/2177
 
 ### manifest.json & favicon stuff
+```html
 <link rel="icon" type="image/png" href="/image.png">
+```
 more in depth read of Google's PWA specs.
 
 ### Themes/skins
 CSS / template based approach.
  - SNiS
- - Last Parsec
  - LCARS:TNG
+ - Last Parsec
  - Artemis
  - Skeuomorphic things?: Star Wars-ish
 need to actually handle portrait vs landscape. 
 
 ### audio
 howler.js
-sym link game assets (/usr/local/share/snis/sounds ?)
+sym link game assets (/usr/local/share/snis/sounds ?), if available (in the makefile, probably), but fallback to bundled default sounds.
 naming/mapping/method(s)? (which might include some kind of respect for css classes)
 
 ### LARPy/BlinkenLights/Greebleisticness
@@ -64,11 +78,13 @@ but look kinda cool. With graphs, animations and so on.
 maybe also a few actually kinda useful utilities, even though not strictly "game stuff". E.g., mini-SPA-app-features for: stopwatch/timer, calculator, rot13/viognere "decryptor",
 
 ### Game data from server
-another bridge? the same one? funky websockets implementation to "directly" get info from server (direct to webbrowser, that is)
+another bridging process? the same one? funky websockets implementation to "directly" get info from server (direct to webbrowser, that is)
 map-like things, messages (perhaps daemon/GM messages to captain particuarly)
+The best options would require some concessions from the upstream game author. Either some kind of json publishing, or possibly a couple of lua hooks that can be hacked into providing something like this directly into the webroot of the http-bridge.
 
 ### Contemplate: Side-channel game info integration possibiliies
-there is some possibility for in-game element, say a password, or coordinates, that could be discovered external to the game proper, because it one of these portable devices was just conficscated from a spy, and it contains the secret info we need; but to "crack it" we need to solve the puzzle on the device, ro get this other device unlocker from somewhere in game.
+There is some possibility for in-game element, say a password, or coordinates, that could be discovered external to the game proper, because it one of these portable devices was just conficscated from a spy, and it contains the secret info we need; but to "crack it" we need to solve the puzzle on the device, or get this other device unlocker from somewhere in game.
+If this becomes a thing, it would probably be good to have some kind of conventional way to include a note in the mission scripts that would advise demon screen and/or put an icon on mission select that "mission requires special external setup/prep". 
 
 ## Screens
 (from https://smcameron.github.io/space-nerds-in-space/#controls)
@@ -88,6 +104,7 @@ there is some possibility for in-game element, say a password, or coordinates, t
  - Cartography/Library
  - Manifest
  - Life Support
+ - Knowledgebase (like an on-board encyclopedia/almanac/dossiers/world-fact-book type of thing)
  - IT/CIS - could have actual stats on the game server, heh. htop/iostat/netstat
 
 
@@ -125,8 +142,8 @@ hmm, going to have to look into this bit where mouse is primary/maybe-only optio
 > When the mouse is at the bottom center of the screen, the guns will be pointed straight ahead.
 > Moving the mouse from the bottom to the top of the screen moves the guns through the full range of pitch.
 > Moving the mouse to the left side of the screen to the right side of the screen moves the guns through the full range of yaw. (Note: Using the arrow keys, you can also yaw and pitch the guns. With the arrow keys, the yaw range is not limited (guns can rotate 360 degrees. This discrepancy could be considered a bug.)
- - The Left mouse button and the SPACE BAR fire the phasers.
- - The Right mouse button and the Z key fire torpedoes.
+ - Left mouse button and the SPACE BAR fire the phasers.
+ - Right mouse button and the Z key fire torpedoes.
  - the + and - (plus and minus) keys control the WAVE LENGTH of the phasers. 
 The CHARGE graph shows how much power will be released in the next phaser shot. It takes some time for the phasers to recharge. Firing rapidly means each shot contains less energy and does less damage (but if you miss, you will have wasted less energy.) If the phasers are damaged, or ENGINEERING has diverted power from the phasers, it may take longer to recharge.
 
@@ -144,9 +161,9 @@ If you do not have enough players, or if you simply do not want to manually repa
 ### Science
 #### SRS
 Science Short Range Scanner Controls
- - The Mouse Scroll Wheel or the RANGE slider control at the top of the screen controls the range (distance) of the short range scanner.
- - The Left and Right Arrow keys or the A and D keys control the direction the scanning beam is pointed. The boundaries of the scanning beam is indicated by two flickering lines on the display.
- - The Up and Down Arrow keys or the W and S keys control the scanning beam width. The wider the beam is the more volume it covers, but the less resolution it has. The narrower the beam is, the less volume it covers, but the more resolving power it has.
+ - Mouse Scroll Wheel or the RANGE slider control at the top of the screen controls the range (distance) of the short range scanner.
+ - Left and Right Arrow keys or the A and D keys control the direction the scanning beam is pointed. The boundaries of the scanning beam is indicated by two flickering lines on the display.
+ - Up and Down Arrow keys or the W and S keys control the scanning beam width. The wider the beam is the more volume it covers, but the less resolution it has. The narrower the beam is, the less volume it covers, but the more resolving power it has.
  Items in the scanner are displayed at a distance from the center which corresponds to the 3D distance.
 When the scanner has resolved an entity, you can click on it with the mouse, and it, and nearby resolved entities will "pop up" out of the display to give you an idea of how they are situated in 3D space.
 #### Details
@@ -158,23 +175,23 @@ If the entity is a ship, the SHIELD PROFILE may indicate that some phaser freque
 Long Range Scanner Controls
 The long range scanner is useful for locating distant planets and starbases. It shows a 3D view of the space around your ship.
 
- - The Mouse Scroll Wheel or the RANGE slider control at the top of the screen controls the range (distance) of the long range scanner.
- - The Left and Right Arrow keys or the A and D keys control the direction the scanning beam is pointed. The boundaries of the scanning beam is indicated by two orange dotted lines on the display forming a kind of "orange slice".
- - The Up and Down Arrow keys or the W and S keys control the scanning beam width. The wider the beam is the more volume it covers, but the less resolution it has. The narrower the beam is, the less volume it covers, but the more resolving power it has.
- - The comma, and forward slash keys rotate (yaw) the scanned volume sphere to the left or right, respectively.
- - The period and L keys rotate (pitch) the scanned volume sphere down and up, respectively.
- - The K and semicolon keys rotate (roll) the scanned volume sphere counter-clockwise and and clockwise, respectively.
- - The ALIGN TO SHIP button aligns the view with the ship so that the view is as if from behind the ship with the ship facing forwards and up is up, left is left, right is right, etc.
+ - Mouse Scroll Wheel or the RANGE slider control at the top of the screen controls the range (distance) of the long range scanner.
+ - Left and Right Arrow keys or the A and D keys control the direction the scanning beam is pointed. The boundaries of the scanning beam is indicated by two orange dotted lines on the display forming a kind of "orange slice".
+ - Up and Down Arrow keys or the W and S keys control the scanning beam width. The wider the beam is the more volume it covers, but the less resolution it has. The narrower the beam is, the less volume it covers, but the more resolving power it has.
+ - comma, and forward slash keys rotate (yaw) the scanned volume sphere to the left or right, respectively.
+ - period and L keys rotate (pitch) the scanned volume sphere down and up, respectively.
+ - K and semicolon keys rotate (roll) the scanned volume sphere counter-clockwise and and clockwise, respectively.
+ - ALIGN TO SHIP button aligns the view with the ship so that the view is as if from behind the ship with the ship facing forwards and up is up, left is left, right is right, etc.
 
 ### Communications
 The row of buttons at the top is for the COMMS OFFICER to control what is displayed on the MAIN SCREEN. For this to work best, individual player stations should not have the MAIN SCREEN ROLE checked (on the NETWORK SETUP SCREEN when they joined the game) but only the computer attached to the projector or big TV should have the MAIN SCREEN role checked. Essentially these buttons make all terminals that have the MAIN SCREEN role switch to displaying the selected station instead. The idea behind this comes from Captain Picard's command, "On screen!" The captain can command any station's screen be displayed "On Screen!" and the COMMS OFFICER can "make it so". Note: it is also possible for any player to press Ctrl-O on their station to make their screen be displayed on the main screen. If they press Ctrl-O a second time, the main screen reverts to showing the main view out the window into space. So if the captain orders "Weapons, On Screen!", either the Weapons Officer can press Ctrl-O, or the Comms Officer can press the WEAPONS button on the COMMS screen. Again, if players have the "MAIN SCREEN" role checked when they join the game, it can be a bit confusing, because then their own computer will be considered to be a "main screen". In general, there normally should only be one computer per bridge that joins the game with the MAIN SCREEN role enabled, and that computer should be the one connected to a projector.
 
 The "EMF" chart in the upper right shows a measuring of local EMF. When an NPC ship scans the players ship, this chart will show elevated levels of EMF. This can give a heads up that some ship is scanning you, and an attack might be coming soon.
 
- - The MAIN SCREEN button in the lower right portion of the screen makes the last 4 lines received appear on the main screen so everyone can see them.
- - The RED ALERT button toggles the red alert system on and off.
- - The shields display is there so the COMMS officer can know if a request to dock will be denied due to shields still being up.
- - The zoom slider control at the bottom of the screen controls the zoom level of the MAIN SCREEN
+ - MAIN SCREEN button in the lower right portion of the screen makes the last 4 lines received appear on the main screen so everyone can see them.
+ - RED ALERT button toggles the red alert system on and off.
+ - shields display is there so the COMMS officer can know if a request to dock will be denied due to shields still being up.
+ - zoom slider control at the bottom of the screen controls the zoom level of the MAIN SCREEN
 
 So what can Comms do with this terminal interface? First of all, anything which is typed in that is not a command is broadcast on the current channel, which is by default channel 0, which all player ships receive. You can also switch channels, and only player ships tuned to the particular channel will receive those messages. The intent here is for player-to-player chat in a multi-bridge setup. The channel system is also used (implicitly) for communications with starbases and with mining bots.
 
@@ -237,13 +254,16 @@ The /computer command is the most powerful action the Comms officer can use, wit
     /computer set warp drive coolant to 50 percent
 
 ### Mainscreen
-From the main screen, you can steer the ship with the ARROW KEYS and with the A, W, S, D keys and additionally Q and E allow you to roll the ship. The primary purpose of the main screen view it to be projected on a large screen for all players to view at once.
+From the main screen, you can steer the ship 
+The primary purpose of the main screen view it to be projected on a large screen for all players to view at once.
 
  - backquote key cycles through first person and a few third person views of the ship.
- - The + and - (plus and minus) keys zoom and unzoom the camera. (Additionally the zoom can be controlled from the COMMS screen.)
+ - + and - (plus and minus) keys zoom and unzoom the camera. (Additionally the zoom can be controlled from the COMMS screen.)
  - SHIFT-W toggles the main screen view between front facing and weapons facing. This is fun to let the whole crew see what the WEAPONS OFFICER is busy destroying.
+ - R key can be used to cycle through different renderer modes (this is really just for debugging though.)
+ - ARROW KEYS and with the A, W, S, D keys steer the ship.
+ - Q and E allow you to roll the ship. 
 
 Note, in a proper multi-player setup, the MAIN SCREEN ROLE (on the NETWORK SETUP SCREEN, see below) should not be active (checked) for most players, but only for the computer which is connected to the projector or big TV.
 
-The R key can be used to cycle through different renderer modes (this is really just for debugging though.)
 
