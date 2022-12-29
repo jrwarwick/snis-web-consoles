@@ -3,73 +3,62 @@
 	<head>
 		<meta charset="utf-8"/>
 		<title>NAVIGATION</title>
-		<!-- 
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-		<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-		-->
-	  	<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width"> 
 		<link rel="manifest" href="manifest.json">
-		<!-- <link rel="stylesheet" type="text/css" href="https://unpkg.com/augmented-ui@2/augmented-ui.min.css"> -->
 		<link href="https://fonts.googleapis.com/css?family=Iceland" rel="stylesheet" type="text/css"> 
-		<!--
-	  <link rel="stylesheet" href="/normalize.css" type="text/css">
-	  <link rel="stylesheet" href="/style.css" type="text/css">
-	  <link rel="stylesheet" href="/snis-sbs-ui.css" type="text/css">
-		-->
-		<link href="/blueprint.css" rel="stylesheet" />
-		<link href="/snis-blueprint.css" rel="stylesheet" />
 
 		<link rel="stylesheet" href="/snis-basic.css" type="text/css">
+		<link rel="stylesheet" href="/snis-grid.css" type="text/css">
 		<link rel="stylesheet" href="/snis-radar.css" type="text/css">
 	</head>
 	<body>
 		<div class="panel">
 			<h1 onClick="toggleFullScreen();">NAVIGATION</h1>
 		</div>
-		<div id="main" bp="grid">
-			<div class="panel" bp="3">
-				<button id="btn_rudder_port" class="XXfoob" data-cmd="RUDDER PORT">RUDDER <br/>&blacktriangleleft; PORT</button>
+		
+		<div id="main" class="panelsection">
+			<div class="panel" >
+				<button id="btn_rudder_port" data-cmd="RUDDER PORT">RUDDER <br/>&blacktriangleleft; PORT</button>
 			</div>
-			<div class="panel" bp="6">
-				<div bp="grid">
-					<div bp="6 offset-4 text-center">
-						<button id="btn_elevator_up" class="XXXbar" data-cmd="ELEVATOR UP">ELEVATOR &blacktriangle; UP</button>
+			<div class="panel" >
+					<div bp=" text-center">
+						<button id="btn_elevator_up" data-cmd="ELEVATOR UP">ELEVATOR &blacktriangle; UP</button>
 						<button id="btn_elevator_down" data-cmd="ELEVATOR DOWN">ELEVATOR &blacktriangledown; DOWN</button>
 					</div>
-				</div>
-				<div bp="grid margin-top--lg">
-					<div bp="6 offset-4">
-						<fieldset name="throttle">
-							<legend>THROTTLE</legend>
-						<button id="btn_throttle_up" data-cmd="THROTTLE UP">THROTTLE UP</button>
-						<button id="btn_reverse_thrust" class="secondary" data-cmd="REVERSE THRUST">REVERSE &tridot; THRUST</button>
-						<button id="btn_throttle_down" data-cmd="THROTTLE DOWN">THROTTLE DOWN</button>
-						</fieldset>
-					</div>
-				</div>
 			</div>
-			<div class="panel" bp="3 text-right">
+			<div class="panel righteous" >
 				<button id="btn_rudder_starboard" data-cmd="RUDDER STARBOARD">RUDDER STARBOARD &blacktriangleright;</button>
 			</div>
-		</div>
-		<div bp="grid">
-			<div bp="4">
+			<div>
+				<table class="fauxmutator">
+					<thead>
+						<tr><th>Inertial Comp.</th><th>Aspect</th><th>Delta</th></tr>
+					</thead>
+					<tbody>
+						<tr><td>01</td><td>03</td><td>05</td></tr>
+						<tr><td>02</td><td>04</td><td>06</td></tr>
+						<tr><td>03</td><td>05</td><td>07</td></tr>
+					</tbody>
+				</table>
+			</div>
+			<div>
+				<fieldset name="throttle">
+					<legend>THROTTLE</legend>
+					<button id="btn_throttle_up" data-cmd="THROTTLE UP">THROTTLE UP</button>
+					<button id="btn_reverse_thrust" class="secondary" data-cmd="REVERSE THRUST">REVERSE &tridot; THRUST</button>
+					<button id="btn_throttle_down" data-cmd="THROTTLE DOWN">THROTTLE DOWN</button>
+				</fieldset>
+			</div>
+			<div>
 				<div><button id="btn_docking_magnets" data-cmd="DOCKING MAGNETS" class="action">DOCKING MAGNETS</button></div>
 				<div> STATUS:&nbsp;NOMINAL </div>
-				<div><a id="btn_main_menu" class="buttonize" href="menu.html">MAIN&nbsp;MENU</a></div>
 			</div>
-			<div class="panel" bp="4">
-				<!-- perhaps this should be a partialpage/client-injection (ajax'd into dom), or SSI, "navigation.nonsense.html_fragment" file ...-->
-				<!-- BEGIN CHUNK -->
-				<table>
-					<tr><th>Inertial Comp.</th><th>Aspect</th><th>Delta</th></tr>
-					<tr><td>01</td><td>03</td><td>05</td></tr>
-					<tr><td>02</td><td>04</td><td>06</td></tr>
-				</table>
-				<!-- END CHUNK -->
-			</div>
-			<div class="radar" bp="4 text-right float-center">
+		</div>
+
+		<div class="panelsection">
+			<div><a id="btn_main_menu" class="buttonize" href="menu.html">MAIN&nbsp;MENU</a></div>
+			<div> </div>
+			<div class="radar righteous" >
 				  <div class="waveguide"></div>
 			</div>
 		</div>
@@ -137,11 +126,10 @@
 			console.warn("just warning, kinda expected this..." + error);
 		}
 
-
 		function faux_mutation() {
 			var row = Math.floor(Math.random() * 2) + 2;
 			var col = Math.floor(Math.random() * 3) + 1;
-			var dd = document.querySelector("body > div:nth-child(3) > div.panel > table > tbody > tr:nth-child("+row+") > td:nth-child("+col+")");
+			var dd = document.querySelector("table.fauxmutator > tbody > tr:nth-child("+row+") > td:nth-child("+col+")");
 			dd.innerText = (Math.floor(dd.innerText) * Math.floor(Math.random() * 99) ) % 999 + (Math.floor(Math.random() * 100)/10);
 			//quasi-recursion
 			var tmr = setTimeout(function() {
@@ -153,3 +141,4 @@
 
 	</script>
 </html>
+
