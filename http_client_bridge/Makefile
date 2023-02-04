@@ -9,6 +9,7 @@ CFLAGS += -L$(OPENSSL_DIR)/lib -lssl -lcrypto
 endif
 
 all: $(PROG)
+	grep 's_http_addr\s*=' http_client_bridge.c > service_port.txt
 	cd .. ; $(DEBUGGER) ./$(PROG) $(ARGS)
 
 $(PROG): http_client_bridge.c
@@ -16,4 +17,4 @@ $(PROG): http_client_bridge.c
 	cp $(PROG) ../
 
 clean:
-	rm -rf ../$(PROG) $(PROG) *.o *.dSYM *.gcov *.gcno *.gcda *.obj *.exe *.ilk *.pdb
+	rm -rf ../$(PROG) $(PROG) *.o *.dSYM *.gcov *.gcno *.gcda *.obj *.exe *.ilk *.pdb service_port.txt

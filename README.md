@@ -20,6 +20,10 @@ But then again, Pi Pico has USB HID, so it can pretend to be a keyboard, which m
 references:
  - https://github.com/smcameron/space-nerds-in-space/blob/master/doc/hacking-space-nerds-in-space.html#guiwidget
  - https://smcameron.github.io/space-nerds-in-space/index.html#comcontrols
+ - Some introductions and examples of mongoose webserver (the heart of the http-to-fifo bridge):
+    * https://johnvidler.co.uk/linux-journal/LJ/192/10680.html
+    * https://github.com/cesanta/mongoose/blob/master/examples/huge-response/main.c
+
 
 ## Setup
     clone https://github.com/jrwarwick/snis-web-consoles.git
@@ -100,12 +104,16 @@ If this becomes a thing, it would probably be good to have some kind of conventi
  - F9 - DEMON SCREEN (dungeon master screen)
  - -- plus synthetic and/or secondary/companion screens:
  - Commander /XO
- - Captain /CO
+ - Captain /CO (including ships log)
  - Cartography/Library
+ - Mining Bot Control and/or "Video Feed"
  - Manifest
  - Life Support
  - Knowledgebase (like an on-board encyclopedia/almanac/dossiers/world-fact-book type of thing)
  - IT/CIS - could have actual stats on the game server, heh. htop/iostat/netstat
+ - Chronometry (Real Time, Mission Time, Countdown, etc.)
+ - Comms II (webRTC, IRC, matrix, whatever sidechannels)
+    * pipe in some kind of hip new chatbot thing with a bunch of noise, but also some in-game clue knowledge. Interrogate to try and get some "clues".
 
 
 ### Navigation Controls

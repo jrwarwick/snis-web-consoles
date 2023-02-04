@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8"/>
-		<title>NAVIGATION</title>
+		<title>SCIENCE</title>
 		<meta name="viewport" content="width=device-width"> 
 		<link rel="manifest" href="manifest.json">
 		<link href="https://fonts.googleapis.com/css?family=Iceland" rel="stylesheet" type="text/css"> 
@@ -22,26 +22,26 @@ margin-top: 1em;
 	</head>
 	<body>
 		<div class="panel">
-			<h1 onClick="toggleFullScreen();">NAVIGATION</h1>
+			<h1 onClick="toggleFullScreen();">SCIENCE</h1>
 		</div>
 		
 		<div id="main" class="panelsection">
 			<div class="panel" >
-				<button id="btn_rudder_port" data-cmd="RUDDER PORT">RUDDER <br/>&blacktriangleleft; PORT</button>
+				<button id="btn_sensor_port" data-cmd="SENSOR YAW PORT">YAW <br/>&blacktriangleleft; PORT</button>
 			</div>
 			<div class="panel" >
 					<div bp=" text-center">
-						<button id="btn_elevator_up" data-cmd="ELEVATOR UP">ELEVATOR &blacktriangle; UP</button>
-						<button id="btn_elevator_down" data-cmd="ELEVATOR DOWN">ELEVATOR &blacktriangledown; DOWN</button>
+						<button id="btn_sensor_elevation_up" data-cmd="SENSOR ELEVATION UP">ELEVATION &blacktriangle; UP</button>
+						<button id="btn_sensor_elevation_down" data-cmd="SENSOR ELEVATION DOWN">ELEVATION &blacktriangledown; DOWN</button>
 					</div>
 			</div>
 			<div class="panel righteous" >
-				<button id="btn_rudder_starboard" data-cmd="RUDDER STARBOARD">RUDDER STARBOARD &blacktriangleright;</button>
+				<button id="btn_sensor_starboard" data-cmd="SENSOR YAW STARBOARD">YAW STARBOARD &blacktriangleright;</button>
 			</div>
 			<div>
 				<table class="fauxmutator">
 					<thead>
-						<tr><th>Inertial Comp.</th><th>Aspect</th><th>Delta</th></tr>
+						<tr><th>Warp Field Comp.</th><th>Aspect</th><th>Delta</th></tr>
 					</thead>
 					<tbody>
 						<tr><td>01</td><td>03</td><td>05</td></tr>
@@ -52,14 +52,15 @@ margin-top: 1em;
 			</div>
 			<div>
 				<fieldset name="throttle">
-					<legend>THROTTLE</legend>
-					<button id="btn_throttle_up" data-cmd="THROTTLE UP">THROTTLE UP</button>
-					<button id="btn_reverse_thrust" class="secondary" data-cmd="REVERSE THRUST">REVERSE &tridot; THRUST</button>
-					<button id="btn_throttle_down" data-cmd="THROTTLE DOWN">THROTTLE DOWN</button>
+					<legend>RESOLUTION</legend>
+					<button id="btn_resolution_up" data-cmd="RESOLUTION INCREASE">INCREASE</button>
+					<button id="btn_reverse_polarity" class="secondary" data-cmd="REVERSE POLARITY">REVERSE &tridot; POLARITY</button>
+					<button id="btn_resolution_down" data-cmd="RESOLUTION DECREASE">DECREASE</button>
 				</fieldset>
 			</div>
 			<div>
-				<div><button id="btn_docking_magnets" data-cmd="DOCKING MAGNETS" class="action">DOCKING MAGNETS</button></div>
+				<div><button id="btn_srs" data-cmd="SHORT RANGE SENSORS" class="action">SHORT RANGE SENSORS</button></div>
+				<div><button id="btn_lrs" data-cmd="LONG RANGE SENSORS" class="action">LONG RANGE SENSORS</button></div>
 				<div> STATUS:&nbsp;NOMINAL </div>
 				<div class="radar righteous" >
 					  <div class="waveguide"></div>

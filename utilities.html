@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8"/>
-		<title>MAIN MENU</title>
+		<title>UTILITIES</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="https://fonts.googleapis.com/css?family=Iceland" rel="stylesheet" type="text/css"> 
 		<!--
@@ -27,16 +27,40 @@
 	</style>
 	</head>
 	<body>
-		<div id="main" bp="grid">
+		<div id="main" bp="grid 6@md">
 			<div>
 				<div class="panel">
-					<h1 onClick="toggleFullScreen();">MAIN MENU</h1>
+					<h1 onClick="toggleFullScreen();">UTILITIES</h1>
 				</div>
-				<a id="a_launch_nav" href="./navigation.html" class="buttonize">NAVIGATION</a>
-				<a id="a_launch_sci" href="./science.html" class="buttonize">SCIENCE</a>
-				<a id="a_launch_wep" href="./weapons.html" class="buttonize">WEAPONS</a>
-				<a id="a_launch_comm" href="./communications.html" class="buttonize">COMMUNICATIONS</a>
-				<a id="a_launch_comm" href="./utilities.html" class="buttonize">UTILIIES</a>
+				<p>This one is mostly client-side only "tools" and "utilities" that might be useful in conjunction with the game, but is not actually directly interacting with the CMD bridge or anything like that</p>
+				<div>
+				<ul>
+					<li>
+					<button id="btn_mission_timer">MISSION TIMER</button> both time passed, and a utility to set count-downs
+					</li>
+					<li>
+					<button id="btn_cryptography" >CRYPTOGRAPHY</button> "decrypt" messages discovered in-game . Maybe also a protected secret keys vault, only the captain can unlock it, but it becomes necessary.
+					<li>
+				<button id="btn_cartography"  >CARTOGRAPHY</button> maybe a list of "Sectors" and a couple of SVGs for each major celestial bodies. would be cool to write some code to extract-and-generate from demon screen.
+					</li>
+					<li>
+				<button id="btn_ships_log"    >SHIPS LOG</button> actually allow "stardate" timstamping and record little messages and read them back. Allow download
+					</li>
+					<li>
+				<button id="btn_encyclopedia" >ENCYCLOPEDIA/KNOWLEDGEBASE</button> indending to be in-game-knowledge and lore, hopefully useful to the game. maybe helps a player to be 'the expert on the Zarkonians" or whatever.
+					</li>
+					<li>
+				<button id="btn_8ball" >MAGIC 8 BALL/advice/humorous-chat-bot-replies-to-inquiries-to-the-galley/brig/head</button> (could use TTS for this last one, maybe)
+					</li>
+					</ul>
+				
+
+
+				<a id="a_launch_nav" href="./nav.html" class="buttonize">NAVIGATION</a>
+				<a id="a_launch_sci" href="./sci.html" class="buttonize">SCIENCE</a>
+				<a id="a_launch_wep" href="./wep.html" class="buttonize">WEAPONS</a>
+				<a id="a_launch_comm" href="./menu.html" class="buttonize">MAIN MENU</a>
+
 				<div class="panel">
 					<!-- perhaps this should be a partialpage/client-injection (ajax'd into dom), or SSI, "navigation.nonsense.html_fragment" file ...-->
 					<!-- BEGIN CHUNK -->
@@ -47,6 +71,7 @@
 					</table>
 					<!-- END CHUNK -->
 				</div>
+				<div><a id="btn_main_menu" class="buttonize" href="menu.html">MAIN&nbsp;MENU</a></div>
 			</div>
 		</div>
 	</body>
@@ -77,19 +102,19 @@
 			.then(response => response.json())
 			.then(data => {
 				console.log('Success:', data);
-				sound_ack.play();
+				soundACK.play();
 			})
 			.catch((error) => {
 				console.error('Error:', error);
-				sound_nack.play();
+				soundNACK.play();
 			});
 		}
 
 	</script>
 	<script src="./howler.js"></script>
 	<script>
-		var sound_ack = new Howl({ src: ['./sounds/tactinput_acknowledge.ogg', './sounds/tactinput_acknowledge.m4a', './sounds/tactinput_acknowledge.webm'] });
-		var sound_nack = new Howl({ src: ['./sounds/tactinput_neg_acknowledge.ogg', './sounds/tactinput_neg_acknowledge.m4a', './sounds/tactinput_neg_acknowledge.webm'] });
+		var soundACK = new Howl({ src: ['./sounds/tactinput_acknowledge.ogg', './sounds/tactinput_acknowledge.m4a', './sounds/tactinput_acknowledge.webm'] });
+		var soundNACK = new Howl({ src: ['./sounds/tactinput_neg_acknowledge.ogg', './sounds/tactinput_neg_acknowledge.m4a', './sounds/tactinput_neg_acknowledge.webm'] });
 		try {
 			toggleFullScreen();
 		} catch (error) {
