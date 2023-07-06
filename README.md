@@ -66,7 +66,7 @@ CSS / template based approach.
  - Last Parsec
  - Artemis
  - Skeuomorphic things?: Star Wars-ish
-need to actually handle portrait vs landscape. 
+ - need to actually handle portrait vs landscape. 
 
 ### audio
 howler.js
@@ -79,16 +79,17 @@ but look kinda cool. With graphs, animations and so on.
 	For Navigation: "INTERTIAL DAMPING COMPENSATOR LOAD: 12 N [ 1.3G @ 727j ]" "GRAVITATIONAL WELL MAP"
 	For Engineering & DamCon & Science:  Life Support "ATMOSPHERIC MIXTURE SPECTRAL ANALYSIS: [ 72 12 6 4 ] , BAROMETRICS [      |  x |  ]
 	For Communications:  "INTERFERENCE MODULATOR PARAMETERS: [ 1273.23 887 3212.222 ]" "EMF PATTERN RECOGNIZER ALGORITHMS: QRF-Z (ALT7) XR3X"
-maybe also a few actually kinda useful utilities, even though not strictly "game stuff". E.g., mini-SPA-app-features for: stopwatch/timer, calculator, rot13/viognere "decryptor",
+	For Weapons: "TARGETING LOCK COUNTERMEASURE/COMPENSATION" "EMF REFRACTION INDEX"
+maybe also a few actually kinda useful utilities, even though not strictly "game stuff". E.g., mini-SPA-app-features for: stopwatch/timer, calculator, rot13/viognere "decryptor", almanac-ish/quick-ref things (periodic table, universal constants & formulae, state transition temperatures for common materials, unit of measure conversions)
 
-### Game data from server
+### Game data from server (back to this web client)
 another bridging process? the same one? funky websockets implementation to "directly" get info from server (direct to webbrowser, that is)
 map-like things, messages (perhaps daemon/GM messages to captain particuarly)
 The best options would require some concessions from the upstream game author. Either some kind of json publishing, or possibly a couple of lua hooks that can be hacked into providing something like this directly into the webroot of the http-bridge.
 
-### Contemplate: Side-channel game info integration possibiliies
-There is some possibility for in-game element, say a password, or coordinates, that could be discovered external to the game proper, because it one of these portable devices was just conficscated from a spy, and it contains the secret info we need; but to "crack it" we need to solve the puzzle on the device, or get this other device unlocker from somewhere in game.
-If this becomes a thing, it would probably be good to have some kind of conventional way to include a note in the mission scripts that would advise demon screen and/or put an icon on mission select that "mission requires special external setup/prep". 
+### Contemplate: Side-channel game info integration possibilities
+There is some possibility for in-game elements, say a password, or coordinates, trajectory, energy level, etc. that could be discovered external to the game proper, perhaps because it was contained in one of these portable devices that was just conficscated from a spy, and it contains the secret info we need; but to "crack it" we need to solve the puzzle on the device, or get this other device unlocker from somewhere in game.
+If this becomes a thing, it would probably be good to have some kind of conventional and standard documented way to include a note in the mission scripts that would advise demon screen and/or put an icon on mission select that "mission requires special external setup/prep". 
 
 ## Screens
 (from https://smcameron.github.io/space-nerds-in-space/#controls)
@@ -103,14 +104,14 @@ If this becomes a thing, it would probably be good to have some kind of conventi
  - F8 - MAIN SCREEN
  - F9 - DEMON SCREEN (dungeon master screen)
  - -- plus synthetic and/or secondary/companion screens:
- - Commander /XO
  - Captain /CO (including ships log)
+ - Commander /XO
  - Cartography/Library
+ - Knowledgebase (like an on-board encyclopedia/almanac/dossiers/world-fact-book type of thing)
  - Mining Bot Control and/or "Video Feed"
  - Manifest
  - Life Support
- - Knowledgebase (like an on-board encyclopedia/almanac/dossiers/world-fact-book type of thing)
- - IT/CIS - could have actual stats on the game server, heh. htop/iostat/netstat
+ - IT/CIS - could have actual stats on the game server, heh. htop/iostat/netstat, client count, last ping/request timestamp
  - Chronometry (Real Time, Mission Time, Countdown, etc.)
  - Comms II (webRTC, IRC, matrix, whatever sidechannels)
     * pipe in some kind of hip new chatbot thing with a bunch of noise, but also some in-game clue knowledge. Interrogate to try and get some "clues".

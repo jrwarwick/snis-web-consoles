@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8"/>
-		<title>WEAPONS</title>
+		<title>COMMUNICATIONS</title>
 		<!-- 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -29,30 +29,29 @@
 		</div>
 		<div id="main" bp="grid">
 			<div class="panel" bp="3">
-				<button id="btn_cannon_port" class="XXfoob" data-cmd="CANNON PORT">CANNON <br/>&blacktriangleleft; PORT</button>
+				<button id="btn_antenna_port" class="XXfoob" data-cmd="ANTENNA PORT">ANTENNA <br/>&blacktriangleleft; PORT</button>
 			</div>
 			<div class="panel" bp="6">
 				<div bp="grid">
 					<div bp="6 offset-4 text-center">
-						<button id="btn_cannon_up" class="XXXbar" data-cmd="CANNON UP">CANNON &blacktriangle; UP</button>
-						<button id="btn_cannon_down" data-cmd="CANNON DOWN">CANNON &blacktriangledown; DOWN</button>
+						<button id="btn_antenna_up" class="XXXbar" data-cmd="ANTENNA UP">ANTENNA &blacktriangle; UP</button>
+						<button id="btn_antenna_down" data-cmd="ANTENNA DOWN">ANTENNA &blacktriangledown; DOWN</button>
 					</div>
 				</div>
 				<div bp="grid margin-top--lg">
 					<div bp="6 offset-4">
-						PHASER WAVELENGTH
-						<input type="range" class="horizontal" />
+						GAIN<input type="range" class="horizontal" />
 						<fieldset name="throttle">
-							<legend>FIRE CONTROL</legend>
-						<button id="btn_fire_phasers" data-cmd="FIRE PHASERS">PHASERS</button>
-						<button id="btn_arm" class="secondary" XXdata-cmd="SAY WEAPON SYSTEMS ARMED">ARM &tridot; WEAPON SYSTEMS</button>
-						<button id="btn_fire_torpedoes" data-cmd="FIRE TORPEDOES">TORPEDOES</button>
+							<legend>ENCRYPTION CONTROL</legend>
+						<button id="btn_encrypt" data-cmd="ENCRYPT">ENCRYPT</button>
+						<button id="btn_arm" class="secondary" XXdata-cmd="SAY WEAPON SYSTEMS ARMED">DISABLE &tridot; CRYPTO SYSTEMS</button>
+						<button id="btn_decrypt" data-cmd="DECRYPT">DECRYPT</button>
 						</fieldset>
 					</div>
 				</div>
 			</div>
 			<div class="panel" bp="3 text-right">
-				<button id="btn_cannon_starboard" data-cmd="CANNON STARBOARD">CANNON STARBOARD &blacktriangleright;</button>
+				<button id="btn_antenna_starboard" data-cmd="ANTENNA STARBOARD">ANTENNA STARBOARD &blacktriangleright;</button>
 			</div>
 		</div>
 		<div bp="grid">
@@ -184,14 +183,14 @@
 			//styling/classes too?
 		});
 		document.getElementById("btn_arm").addEventListener("click", function(event) {
-			if (event.target.innerText.startsWith("ARM")){
-				document.querySelector("#btn_fire_phasers").removeAttribute("disabled");
-				document.querySelector("#btn_fire_torpedoes").removeAttribute("disabled");
-				event.target.innerText = "DIS" + event.target.innerText;
+			if (event.target.innerText.startsWith("EN")){
+				document.querySelector("#btn_encrypt").removeAttribute("disabled");
+				document.querySelector("#btn_decrypt").removeAttribute("disabled");
+				event.target.innerText = event.target.innerText.replace("EN","DIS");
 			} else {
-				document.querySelector("#btn_fire_phasers").setAttribute("disabled","true");
-				document.querySelector("#btn_fire_torpedoes").setAttribute("disabled","true");
-				event.target.innerText = event.target.innerText.replace("DIS","");
+				document.querySelector("#btn_encrypt").setAttribute("disabled","true");
+				document.querySelector("#btn_decrypt").setAttribute("disabled","true");
+				event.target.innerText = event.target.innerText.replace("DIS","EN");
 			}
 		});
 
