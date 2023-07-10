@@ -25,7 +25,7 @@
 	</head>
 	<body>
 		<div class="panel">
-			<h1 onClick="toggleFullScreen();">WEAPONS</h1>
+			<h1 onClick="toggleFullScreen();">COMMUNICATIONS</h1>
 		</div>
 		<div id="main" bp="grid">
 			<div class="panel" bp="3">
@@ -44,9 +44,10 @@
 						<fieldset name="throttle">
 							<legend>ENCRYPTION CONTROL</legend>
 						<button id="btn_encrypt" data-cmd="ENCRYPT">ENCRYPT</button>
-						<button id="btn_arm" class="secondary" XXdata-cmd="SAY WEAPON SYSTEMS ARMED">DISABLE &tridot; CRYPTO SYSTEMS</button>
+						<button id="btn_arm" class="secondary" XXdata-cmd="SAY CRYPTOGRAPHIC SYSTEMS ENABLED">DISABLE &tridot; CRYPTO SYSTEMS</button>
 						<button id="btn_decrypt" data-cmd="DECRYPT">DECRYPT</button>
 						</fieldset>
+						<button id="btn_red_alert" class="secondary" data-cmd="RED ALERT">&tridot; RED ALERT &tridot;</button>
 					</div>
 				</div>
 			</div>
@@ -66,7 +67,7 @@
 				<!-- perhaps this should be a partialpage/client-injection (ajax'd into dom), or SSI, "navigation.nonsense.html_fragment" file ...-->
 				<!-- BEGIN CHUNK -->
 				<table>
-					<tr><th>W/Rel-v</th><th>Delta-a</th><th>Delta-v</th></tr>
+					<tr><th>Doppler Comp.</th><th>Delta-a</th><th>Delta-v</th></tr>
 					<tr><td>01</td><td>03</td><td>05</td></tr>
 					<tr><td>02</td><td>04</td><td>06</td></tr>
 				</table>
@@ -94,7 +95,7 @@
 			console.info("Transmitting command: "+text);
 
 			//fetch('/SHIP/STATIONNAME/TARGETNOUN/VERB?parametername=value', {
-			fetch("/SHIP/WEAPONS/" + text.toUpperCase().replace(" ","/"), {
+			fetch("/SHIP/COMMUNICATIONS/" + text.toUpperCase().replace(" ","/"), {
 				method: 'POST', // or 'PUT'
 				headers: {
 					'Content-Type': 'application/json',
