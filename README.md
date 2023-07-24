@@ -37,6 +37,13 @@ references:
     ./http_client_bridge/snis_http_bridge
     # And navigate to http://${HOSTNAME}:8000/ in your preferred web-browsing device.
 
+alt:
+mkdir sound ; cd sound
+ln -s /usr/local/share/snis/sounds/ui2.ogg tactinput_acknowledge.ogg
+ln -s /usr/local/share/snis/sounds/ui3.ogg tactinput_neg_acknowledge.ogg
+
+
+
 ## ToDo:
 
 ### Direct CMDs implementation
@@ -44,14 +51,15 @@ particularly  /CMD/QUIT to shutdown the http bridge process entirely
 /CMD/ANNOUNCE to place a popup modal div on all connected clients with arbitrary message. Sanitization considerations.
 
 ### Makefile install target
-Would not be necessary in this spearate project if adopted upstream by parent project.
+Would not be necessary in this separate project if adopted upstream by parent project.
 Maybe also special target for audio asset symlinking
 
 ### main index.html that is also a menu 
 that lists all the client interfaces in a nice layout.
 
 also maybe some fun/cool QR code , Chirp, TTS, IRC/XMLPP broadcasts etc to announce/share/spawn/clone the "client UI" URL. 
-At least dump it on the console or something. notify-send mabye?  https://community.linuxmint.com/tutorial/view/2177
+At least dump it on the console or something. Linux/freedesktop "notify-send" maybe?  https://community.linuxmint.com/tutorial/view/2177
+https://specifications.freedesktop.org/notification-spec/notification-spec-latest.html
 
 ### manifest.json & favicon stuff
 ```html
@@ -76,7 +84,7 @@ naming/mapping/method(s)? (which might include some kind of respect for css clas
 ### LARPy/BlinkenLights/Greebleisticness
 Maybe some (optional) buttons and switches and "data read-outs" that do not actually have any game function whatsover.
 but look kinda cool. With graphs, animations and so on.
-	For Navigation: "INTERTIAL DAMPING COMPENSATOR LOAD: 12 N [ 1.3G @ 727j ]" "GRAVITATIONAL WELL MAP"
+	For Navigation: "INERTIAL DAMPING COMPENSATOR LOAD: 12 N [ 1.3G @ 727j ]" "GRAVITATIONAL WELL MAP"
 	For Engineering & DamCon & Science:  Life Support "ATMOSPHERIC MIXTURE SPECTRAL ANALYSIS: [ 72 12 6 4 ] , BAROMETRICS [      |  x |  ]
 	For Communications:  "INTERFERENCE MODULATOR PARAMETERS: [ 1273.23 887 3212.222 ]" "EMF PATTERN RECOGNIZER ALGORITHMS: QRF-Z (ALT7) XR3X"
 	For Weapons: "TARGETING LOCK COUNTERMEASURE/COMPENSATION" "EMF REFRACTION INDEX"
@@ -84,12 +92,38 @@ maybe also a few actually kinda useful utilities, even though not strictly "game
 
 ### Game data from server (back to this web client)
 another bridging process? the same one? funky websockets implementation to "directly" get info from server (direct to webbrowser, that is)
-map-like things, messages (perhaps daemon/GM messages to captain particuarly)
+map-like things, messages (perhaps daemon/GM messages to captain particularly)
 The best options would require some concessions from the upstream game author. Either some kind of json publishing, or possibly a couple of lua hooks that can be hacked into providing something like this directly into the webroot of the http-bridge.
 
 ### Contemplate: Side-channel game info integration possibilities
 There is some possibility for in-game elements, say a password, or coordinates, trajectory, energy level, etc. that could be discovered external to the game proper, perhaps because it was contained in one of these portable devices that was just conficscated from a spy, and it contains the secret info we need; but to "crack it" we need to solve the puzzle on the device, or get this other device unlocker from somewhere in game.
 If this becomes a thing, it would probably be good to have some kind of conventional and standard documented way to include a note in the mission scripts that would advise demon screen and/or put an icon on mission select that "mission requires special external setup/prep". 
+
+### Component naming reconsider
+Is "bridge" a bad metaphor name because it collides with "starship _bridge_"? Maybe a rename to http_client_adapter?
+
+### StarDate standard
+Haven't found a reasonable and/or consolidated canonical standard. Here is one, about as ridiculous as everything else:
+The star nearest to Sagittarius A* (the center of our galaxy) is desginated "S2". S2's orbit is 16 years; a hexadecade, if you will.
+Let us pretend a very very stable orbital period, and we now have a stellar-based galactic basis for dates. I.e., Stardate.
+Note that most star dates are 5 digit (in the TNG era, anyway), and given dates are about midway through the thousands.
+Thus, if first three digits are the Hexadecade then we are around 2000 years after some shared marking event (maybe the first and only time a warp engine popped on the event horizon of Sagittarius A*, but it is a one-time deal and left a "tachyon stream", so while nice for reference, its a one-way suicide trip AND WE MUST NEVER DO IT AGAIN. DON'T CROSS THE STREAMS!).
+Ok, so two digits of hexadeximal means we have 4,096 "earth years" of time expressed in the star date.
+Then two more digits to divide a hexadecade into 256 pieces. That means 256 of 22 day-long (quasi-month) "epochs".
+After "Mark/point", we have a decimal fraction; for every .01, a little over 5 hours passes and also thus .001 is about half an hour, and .0001 is about 3 minutes. So reasonably, a typical workshift or rest period is .02 long, and .1 is "a weekend" or "a couple of days", from a typical earth-human point of view.
+
+So maybe a typical wristwatch will read:  
+   .01:2:345
+ 5-hr  30m   1/100ths of a 30min seg
+block  seg.   or: 3min and 20s and 2s ticks
+
+Another idea is just to go sorta SI, but get the actual cesium period itself to a power of 10 and let "earth periods" fall where they may. 
+Something like: the transition between the two hyperfine states of the atom's ground state. This transition occurs at a frequency of 9,192,631,770 oscillations per second, which is often rounded to 9.192631770 GHz.
+So lets go with 10Ghz even. So "System Galactic" seconds are 1.08782775708 x longer than earth seconds.
+Then decaseconds and then "minutes" are kinda close to hectoseconds, kinda almost 2 minutes. Then we have 18 (earth minute) periods, followed by 3-hour periods and then a 30-hour day. 10-day week (at 30-hours a day)? Maybe. 
+
+but maybe all that is just too much baloney. a simple ISO standard YYYY-MM-DDTHH:MI trimmed and pronouncing only the digits and "T" as "mark" is understandable by real players, and kinda sounds goodish-enough.
+
 
 ## Screens
 (from https://smcameron.github.io/space-nerds-in-space/#controls)
@@ -179,7 +213,7 @@ When the scanner has resolved an entity, you can click on it with the mouse, and
 Science Details Screen
 Once an entity is resolved by the scanner and selected, you can press the DETAILS button to see more details about the selected item. What you see depends on the type of the item.
 The Warp Factor value gives you an idea of what value to use if you wish to travel to the entity via the warp drive (that is, you may want to relay this information to the NAVIGATION OFFICER.)
-If the entity is a ship, the SHIELD PROFILE may indicate that some phaser frequency might be especially effective (so you may want to relay this information to theWEAPONS OFFICER.)
+If the entity is a ship, the SHIELD PROFILE may indicate that some phaser frequency might be especially effective (so you may want to relay this information to the WEAPONS OFFICER.)
 #### LRS
 Long Range Scanner Controls
 The long range scanner is useful for locating distant planets and starbases. It shows a 3D view of the space around your ship.
