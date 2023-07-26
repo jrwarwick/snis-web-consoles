@@ -36,6 +36,12 @@
 			font-size:1.8em;
 			font-weight:bold;
 		}
+		#digitalClock, #digitalStopwatch { /* attempt to reduce distracting alignment flutter of non-monospace fonts */
+		    font-variant-numeric: tabular-nums lining-nums;
+			font-feature-settings: 'tnum' 1;
+		    text-align: left;
+			margin-left: 44%;
+		}
 	</style>
 	</head>
 	<body>
@@ -50,6 +56,7 @@
 						<h1>MISSION TIME</h1>
 						<canvas id="analogClock" width="102" height="102">Clock</canvas>
 						<p id="digitalClock">--:--:--</p>
+						<p id="digitalStopwatch">--:--:--</p>
 					</div>
 					<button id="addStopWatch">INIT TIMECOUNT</button> <!-- TODO: optional label? -->
 
@@ -107,9 +114,16 @@
 			});
 		}
 
+		//--UI Wire-up--//
+		var sinceTimeZero = 0;
+		var btn_addStopWatch = document.getElementById("addStopWatch");
+		btn_addStopWatch.addEventListener("click",(event)=>{
+			sinceTimeZero += 1;
+
+		});
 	</script>
 	<script src="./howler.js"></script>
-	<script>
+	<script>//--Kickstart the UI--//
 		var soundACK = new Howl({ src: ['./sounds/tactinput_acknowledge.ogg', './sounds/tactinput_acknowledge.m4a', './sounds/tactinput_acknowledge.webm'] });
 		var soundNACK = new Howl({ src: ['./sounds/tactinput_neg_acknowledge.ogg', './sounds/tactinput_neg_acknowledge.m4a', './sounds/tactinput_neg_acknowledge.webm'] });
 		try {
@@ -140,6 +154,7 @@ function setupAnalogClock(canvas, clockWidth) {
 	var centerX = canvas.width / 2;
 	var centerY = canvas.height / 2;
 	var digital = document.getElementById("digitalClock");
+	var stopwatch = document.getElementById("digitalStopwatch");
 
 	function tick() {
 		var date = new Date();
@@ -148,20 +163,24 @@ function setupAnalogClock(canvas, clockWidth) {
 
 		var hours = date.getHours();
 		ctx.strokeStyle = "yellow";
-		ctx.lineWidth = 2;
+		ctx.lineWidth = 3;
 		drawHand(clockWidth/3, hours * 30);
 
 		var minutes = date.getMinutes();
 		ctx.strokeStyle = "orange";
 		ctx.lineWidth = 2;
-		drawHand(clockWidth/2, minutes * 6);
+		drawHand(clockWidth/2.5, minutes * 6);
 
 		var seconds = date.getSeconds();
 		ctx.strokeStyle = "red";
 		ctx.lineWidth = 1;
 		drawHand(clockWidth/2, seconds * 6);
 
-		digital.innerText = hours+":"+minutes+":"+seconds;
+		digital.innerText = ("0"+hours).slice(-2)+":"+("0"+minutes).slice(-2)+":"+("0"+seconds).slice(-2);
+		if (sinceTimeZero) {
+			stopwatch.innerText = ("0"+Math.floor(sinceTimeZero / 360)).slice(-2) + ":" + ("0"+Math.floor(sinceTimeZero / 60)).slice(-2) + ":" + ("0"+sinceTimeZero % 60).slice(-2);
+			sinceTimeZero += 1;
+		}
 
 		function drawStatic() {
 			ctx.beginPath();
@@ -228,5 +247,6 @@ function setupAnalogClock(canvas, clockWidth) {
 
 
 	setupAnalogClock(document.getElementById("analogClock"), 100);
+	
 	</script>
 </html>
