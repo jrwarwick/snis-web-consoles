@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8"/>
-		<title>UTILITY - SHIP'S LOG</title>
+		<title>UTILITY - CHRONOMETRY</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="https://fonts.googleapis.com/css?family=Iceland" rel="stylesheet" type="text/css"> 
 		<!--
@@ -25,26 +25,17 @@
 			margin-left: 1em;
 		}
 
-
-		textarea {
-			background-color: black;
-			background-color: #040408;
-		    color: #22DD22;
-			    font-family: 'Tomorrow', 'Orbitron', Arial, Helvetica, sans-serif;
-			font-size: 1.15em;
-
-			max-width: 100%;
-			line-height: 1.5;
-			border-radius: 5px;
-			border: 1px solid green;
-			/* box-shadow: 1px 1px 1px #999;*/
-		    display: block;
-			    margin:.5em;
+		#clockontainer {
+		      color:green;
+		      background-color:black;
+			margin: 0 auto;
+			width: 800px;
+			text-align: center;
+			border: green solid 1px;
 		}
-
-		label {
-		    display: block;
-			margin-bottom: .5em;
+		#clockontainer p{
+			font-size:1.8em;
+			font-weight:bold;
 		}
 	</style>
 	</head>
@@ -52,20 +43,20 @@
 		<div id="main" bp="grid 6@md">
 			<div>
 				<div class="panel">
-					<h1 onClick="toggleFullScreen();">SHIP'S LOG</h1>
+					<h1 onClick="toggleFullScreen();">CHRONOMETRY</h1>
 				</div>
 				<div class="panel">
-					<label for="logentry" id="logentry_label">STARDATE</label>
-					<textarea id="logentry" name="logentry" rows="12" cols="60"></textarea>
-					<button id="btn_record">ENTER RECORD</button> 
-				<ul>
-					<li> YYYY-MM-DD.HH:MI
-						<span id="YYYY-MM-DD.HH:MI">ipsum lorem. Dolreum delirium.</span>
-					</li>
-				</ul>
-				<p id="tempdisplay">x</p>
-				
+					<p id="stardate">STARDATE: &nbsp; </p>
+					<div id="clockontainer">
+						<h1>MISSION TIME</h1>
+						<canvas id="analogClock" width="102" height="102">Clock</canvas>
+						<p id="digitalClock">--:--:--</p>
+					</div>
+					<button id="addStopWatch">INIT TIMECOUNT</button> <!-- TODO: optional label? -->
 
+					<button id="addTimer"    >INIT COUNTDOWN</button> <!-- TODO: optional label? -->
+					<!-- todo: beep alert if hit zero -->
+				</div>
 
 
 				<div class="panel">
@@ -82,7 +73,7 @@
 			</div>
 		</div>
 	</body>
-	<script>//--Utility Function definitions--//
+	<script>
 		function toggleFullScreen() {
 			if (!document.fullscreenElement) {
 				document.documentElement.requestFullscreen();
@@ -117,33 +108,9 @@
 			});
 		}
 
-		//TODO: something more robust? like json, or RSS-schema XML doc? update semantics?
-		function recordLogEntry(tag,text) {
-			localStorage["shipslog."+tag] = text;
-		}
-
-		function retrieveLogEntries(tag) {
-			let elDisplay = document.getElementById("tempdisplay");
-			if (tag) {
-				console.info("single entry retrieveal NOT IMPLEMENTED YET!");
-			} else {
-				for(var lskey in localStorage) {
-					if (lskey.match("^shipslog\.")) {
-						let entry = localStorage[lskey];
-						console.log(entry);
-						elDisplay.innerHTML+= "<span>"+lskey.replace("shipslog\.","")+"</span><br/>  "+entry;
-					}
-				}
-			}
-		}
-	//--Wire-up--//
-	const btn_record = document.getElementById("btn_record");
-	btn_record.addEventListener("click",(event)=>{
-		recordLogEntry(stardate,document.getElementById("logentry").value);
-	});
 	</script>
 	<script src="./howler.js"></script>
-	<script>//--UI kickstart--//
+	<script>
 		var soundACK = new Howl({ src: ['./sounds/tactinput_acknowledge.ogg', './sounds/tactinput_acknowledge.m4a', './sounds/tactinput_acknowledge.webm'] });
 		var soundNACK = new Howl({ src: ['./sounds/tactinput_neg_acknowledge.ogg', './sounds/tactinput_neg_acknowledge.m4a', './sounds/tactinput_neg_acknowledge.webm'] });
 		try {
@@ -154,13 +121,113 @@
 
 		//TODO: define and call a function to list/iterate over all stardate entries and apply to template.
 
-		var stardate = new Date().toISOString().slice(0, 16).replace("T",".");
-		retrieveLogEntries();
-		document.getElementById("logentry_label").innerText += " " + stardate;
+		var stardate = new Date().toISOString().slice(0, 16).replace("T",".")
+		document.getElementById("stardate").innerText += " " + stardate;
 		//TODO: timer to update once per minute.
 		
 		//TODO: wire up a localstorage commit on btn_record click
 		//possibly, this is "RSS" based internally. which would lead to other possibilities like a master daemonscreen/GM "rss feed subscription feed" 
 		// or maybe in-game, occasional access of another ship's log remotely (salvage/explore derelicts, espionage/"hacking" of active ships
+
+
+
+/**
+ * Setup and start an analog clock using a canvas
+ * @param canvas The canvas to use
+ * @param clockWidth The width of the clock (radius*2)
+ */
+function setupAnalogClock(canvas, clockWidth) {
+	var ctx = canvas.getContext("2d");
+	var centerX = canvas.width / 2;
+	var centerY = canvas.height / 2;
+	var digital = document.getElementById("digitalClock");
+
+	function tick() {
+		var date = new Date();
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		drawStatic();
+
+		var hours = date.getHours();
+		ctx.strokeStyle = "yellow";
+		ctx.lineWidth = 2;
+		drawHand(clockWidth/3, hours * 30);
+
+		var minutes = date.getMinutes();
+		ctx.strokeStyle = "orange";
+		ctx.lineWidth = 2;
+		drawHand(clockWidth/2, minutes * 6);
+
+		var seconds = date.getSeconds();
+		ctx.strokeStyle = "red";
+		ctx.lineWidth = 1;
+		drawHand(clockWidth/2, seconds * 6);
+
+		digital.innerText = hours+":"+minutes+":"+seconds;
+
+		function drawStatic() {
+			ctx.beginPath();
+			ctx.arc(centerX, centerY, clockWidth/2, 0, 2 * Math.PI, false);
+			ctx.strokeStyle = "green";
+			ctx.lineWidth = 2;
+			ctx.stroke();
+			ctx.closePath();
+
+			ctx.beginPath();
+			ctx.arc(centerX, centerY, 2, 0, 2 * Math.PI, false);
+			ctx.fillStyle = "green";
+			ctx.fill();
+			ctx.closePath();
+
+			drawNumbers();
+
+			function drawNumbers() {
+				var i = 12;
+				ctx.strokeStyle = "green";
+				ctx.lineWidth = 2;
+				while(i > 0) {
+					ctx.save();
+					ctx.beginPath();
+					ctx.translate(centerX, centerY);
+					var angle = (i * 30) * Math.PI/180;
+					ctx.rotate(angle);
+					ctx.translate(0, -clockWidth/2);
+
+					// Drawing numbers doesn't look so good because of the origin of the text
+//					ctx.save();
+//					ctx.translate(0, -10);
+//					ctx.rotate(-angle);
+//					ctx.fillText(i, -3, 0);
+//					ctx.restore();
+
+					ctx.moveTo(0, 0);
+					ctx.lineTo(0, 10);
+					ctx.stroke();
+					ctx.closePath();
+					ctx.restore();
+					i --;
+				}
+			}
+		}
+
+		function drawHand(length, angle) {
+			ctx.save();
+			ctx.beginPath();
+			ctx.translate(centerX, centerY);
+			ctx.rotate(-180 * Math.PI/180); // Correct for top left origin
+			ctx.rotate(angle * Math.PI/180);
+			ctx.moveTo(0, 0);
+			ctx.lineTo(0, length);
+			ctx.stroke();
+			ctx.closePath();
+			ctx.restore();
+		}
+	}
+
+	tick();
+	window.setInterval(tick, 1000);
+}
+
+
+	setupAnalogClock(document.getElementById("analogClock"), 100);
 	</script>
 </html>
