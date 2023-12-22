@@ -28,6 +28,9 @@
 		    display: block;
 			margin-bottom: .5em;
 		}
+		ul.log > li > span {
+			margin-right:2em;
+		}
 	</style>
 	</head>
 	<body>
@@ -40,12 +43,13 @@
 					<label for="logentry" id="logentry_label">STARDATE</label>
 					<textarea id="logentry" name="logentry" rows="12" cols="60"></textarea>
 					<button id="btn_record">ENTER RECORD</button> 
-				<ul>
+				<p id="tempdisplay">
+				<ul class="log">
 					<li> YYYY-MM-DD.HH:MI
 						<span id="YYYY-MM-DD.HH:MI">ipsum lorem. Dolreum delirium.</span>
 					</li>
 				</ul>
-				<p id="tempdisplay">x</p>
+				</p>
 				
 
 
@@ -102,26 +106,34 @@
 		//TODO: something more robust? like json, or RSS-schema XML doc? update semantics?
 		function recordLogEntry(tag,text) {
 			localStorage["shipslog."+tag] = text;
+			document.getElementById("logentry").value = "";
 		}
 
 		function retrieveLogEntries(tag) {
 			let elDisplay = document.getElementById("tempdisplay");
+			elDisplay.innerHTML='';
 			if (tag) {
 				console.info("single entry retrieveal NOT IMPLEMENTED YET!");
 			} else {
+				//TODO: create raw array and fill it with keys, sort and then display
 				for(var lskey in localStorage) {
 					if (lskey.match("^shipslog\.")) {
 						let entry = localStorage[lskey];
 						console.log(entry);
-						elDisplay.innerHTML+= "<span>"+lskey.replace("shipslog\.","")+"</span><br/>  "+entry;
+						elDisplay.innerHTML+= "<li><span>"+lskey.replace("shipslog\.","")+"</span>  "+entry+"</li>";
 					}
 				}
+				elDisplay.innerHTML='<ul class="log">'+elDisplay.innerHTML+"</ul>";
 			}
 		}
 	//--Wire-up--//
 	const btn_record = document.getElementById("btn_record");
 	btn_record.addEventListener("click",(event)=>{
-		recordLogEntry(stardate,document.getElementById("logentry").value);
+		let l_stardate = new Date().toISOString().slice(0, 16).replace("T",".");
+		//recordLogEntry(stardate,document.getElementById("logentry").value);
+		recordLogEntry(l_stardate,document.getElementById("logentry").value);
+		retrieveLogEntries();
+		//TODO: IFF stardate hasn't advanced (minute change) and/or button pressed, then we are just kind updating, but once a button has been pressed, with content unchanged, clean out the box.
 	});
 	</script>
 	<script src="./howler.js"></script>

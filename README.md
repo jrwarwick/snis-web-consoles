@@ -46,6 +46,10 @@ ln -s /usr/local/share/snis/sounds/ui3.ogg tactinput_neg_acknowledge.ogg
 
 ## ToDo:
 
+### bugs
+on phone: going to fullscreen in landscape is fine, but going to fullscreen in portrait pushs the right side column off screen
+ships log is not sorted 
+
 ### Direct CMDs implementation
 particularly  /CMD/QUIT to shutdown the http bridge process entirely
 /CMD/ANNOUNCE to place a popup modal div on all connected clients with arbitrary message. Sanitization considerations.
