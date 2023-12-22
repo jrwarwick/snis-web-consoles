@@ -90,7 +90,7 @@ static void request_handler(struct mg_connection *c, int ev, void *ev_data, void
 		struct mg_tls_opts opts = {
 			/*.ca = "ca.pem",  */      /* Uncomment to enable two-way SSL */
 			.cert = "server.pem",     /* Certificate PEM file */
-			.certkey = "server.pem",  /* This pem conains both cert and key */
+			.key = "server.pem",  /* This pem conains both cert and key */
 		};
 		mg_tls_init(c, &opts);
 	} else if (ev == MG_EV_HTTP_MSG) {
@@ -135,7 +135,7 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Arguments not yet implemented.");
 	}
 
-	mg_log_set("2");     /* Set to 3 to enable debug */
+	mg_log_set(2);     /* Set to 3 to enable debug */
 	mg_mgr_init(&mgr);   /* Initialise event manager */
 	mg_http_listen(&mgr, s_http_addr, request_handler, NULL);    /* Create HTTP listener */
 	mg_http_listen(&mgr, s_https_addr, request_handler, (void *) 1);  /* HTTPS listener  */
