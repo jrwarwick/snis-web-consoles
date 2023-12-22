@@ -149,14 +149,14 @@
  */
 function setupAnalogClock(canvas, clockWidth) {
 	var ctx = canvas.getContext("2d");
-	var centerX = canvas.width / 2;
-	var centerY = canvas.height / 2;
+	var centerX = canvas.width / 2 ;
+	var centerY = canvas.height / 2 ;
 	var digital = document.getElementById("digitalClock");
 	var stopwatch = document.getElementById("digitalStopwatch");
 
 	function tick() {
 		var date = new Date();
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.clearRect(0, 0, canvas.width , canvas.height );
 		drawStatic();
 
 		var hours = date.getHours();
@@ -184,7 +184,7 @@ function setupAnalogClock(canvas, clockWidth) {
 			ctx.beginPath();
 			ctx.arc(centerX, centerY, clockWidth/2, 0, 2 * Math.PI, false);
 			ctx.strokeStyle = "green";
-			ctx.lineWidth = 2;
+			ctx.lineWidth = 1;
 			ctx.stroke();
 			ctx.closePath();
 
@@ -193,6 +193,36 @@ function setupAnalogClock(canvas, clockWidth) {
 			ctx.fillStyle = "green";
 			ctx.fill();
 			ctx.closePath();
+
+			//weirdo outer deka-ring
+			ctx.beginPath();
+			ctx.arc(centerX, centerY, clockWidth/3.25, 0, 2 * Math.PI, false);
+			ctx.strokeStyle = "green";
+			ctx.lineWidth = 1;
+			ctx.stroke();
+			ctx.closePath();
+			//
+			function drawDekaNumbers() {
+				var i = 10;
+				ctx.strokeStyle = "grey";
+				ctx.lineWidth = 1;
+				while(i > 0) {
+					ctx.save();
+					ctx.beginPath();
+					ctx.translate(centerX, centerY);
+					var angle = (i * 36) * Math.PI/180;
+					ctx.rotate(angle);
+					ctx.translate(0, -clockWidth/3.25);
+
+					ctx.moveTo(0, 0);
+					ctx.lineTo(0, 10);
+					ctx.stroke();
+					ctx.closePath();
+					ctx.restore();
+					i --;
+				}
+			}
+			drawDekaNumbers();
 
 			drawNumbers();
 
