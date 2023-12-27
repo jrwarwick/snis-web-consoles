@@ -59,6 +59,8 @@
 					<button id="addStopWatch">INIT TIMECOUNT</button> <!-- TODO: optional label? -->
 
 					<button id="addTimer"    >INIT COUNTDOWN</button> <!-- TODO: optional label? -->
+					<input id="countdownInterval" value="10" type="number"/>
+						<p id="digitalCountdown">--:--:--</p>
 					<!-- todo: beep alert if hit zero -->
 				</div>
 
@@ -114,10 +116,14 @@
 
 		//--UI Wire-up--//
 		var sinceTimeZero = 0;
+		var countdownSpan = 0;
 		var btn_addStopWatch = document.getElementById("addStopWatch");
 		btn_addStopWatch.addEventListener("click",(event)=>{
 			sinceTimeZero += 1;
-
+		});
+		var btn_addTimer = document.getElementById("addTimer");
+		btn_addTimer.addEventListener("click",(event)=>{
+			countdownSpan = document.getElementById("countdownInterval").value;
 		});
 	</script>
 	<script src="./howler.js"></script>
@@ -153,6 +159,7 @@ function setupAnalogClock(canvas, clockWidth) {
 	var centerY = canvas.height / 2 ;
 	var digital = document.getElementById("digitalClock");
 	var stopwatch = document.getElementById("digitalStopwatch");
+	var countdown = document.getElementById("digitalCountdown");
 
 	function tick() {
 		var date = new Date();
@@ -178,6 +185,10 @@ function setupAnalogClock(canvas, clockWidth) {
 		if (sinceTimeZero) {
 			stopwatch.innerText = ("0"+Math.floor(sinceTimeZero / 360)).slice(-2) + ":" + ("0"+Math.floor(sinceTimeZero / 60)).slice(-2) + ":" + ("0"+sinceTimeZero % 60).slice(-2);
 			sinceTimeZero += 1;
+		}
+		if (countdownSpan > -1 ) {
+			countdown.innerText = ("0"+Math.floor(countdownSpan / 360)).slice(-2) + ":" + ("0"+Math.floor(countdownSpan / 60)).slice(-2) + ":" + ("0"+countdownSpan % 60).slice(-2);
+			countdownSpan -= 1;
 		}
 
 		function drawStatic() {
