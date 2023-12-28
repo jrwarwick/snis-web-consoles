@@ -31,6 +31,9 @@
 		ul.log > li > span {
 			margin-right:2em;
 		}
+		#btn_purge {
+			font-size:.85em;
+		}
 	</style>
 	</head>
 	<body>
@@ -41,7 +44,7 @@
 				</div>
 				<div class="panel">
 					<label for="logentry" id="logentry_label">STARDATE</label>
-					<textarea id="logentry" name="logentry" rows="12" cols="60"></textarea>
+					<textarea id="logentry" name="logentry" rows="10" cols="60"></textarea>
 					<button id="btn_record">ENTER RECORD</button> 
 				<p id="tempdisplay">
 				<ul class="log">
@@ -63,6 +66,9 @@
 						<tr><td>02</td><td>2600</td></tr>
 					</table>
 					<!-- END CHUNK -->
+					<ul class="button_stack">
+						<li><button class="secondary" id="btn_purge">&CircleTimes; PURGE LOGS &CircleTimes;</button></li>
+					</ul>
 				</div>
 				<div><a id="btn_main_menu" class="buttonize" href="menu.html">MAIN&nbsp;MENU</a></div>
 			</div>
@@ -105,7 +111,13 @@
 
 		//TODO: something more robust? like json, or RSS-schema XML doc? update semantics?
 		function recordLogEntry(tag,text) {
-			localStorage["shipslog."+tag] = text;
+			let existing = localStorage["shipslog."+tag];
+			if (existing) {
+				existing += "<br/>\n";
+			} else {
+				existing =""
+			}
+			localStorage["shipslog."+tag] = (existing + text).replace(/(<br\/>\n*)+/gi,"<br/>\n");
 			document.getElementById("logentry").value = "";
 		}
 
@@ -126,15 +138,29 @@
 				elDisplay.innerHTML='<ul class="log">'+elDisplay.innerHTML+"</ul>";
 			}
 		}
-	//--Wire-up--//
-	const btn_record = document.getElementById("btn_record");
-	btn_record.addEventListener("click",(event)=>{
-		let l_stardate = new Date().toISOString().slice(0, 16).replace("T",".");
-		//recordLogEntry(stardate,document.getElementById("logentry").value);
-		recordLogEntry(l_stardate,document.getElementById("logentry").value);
-		retrieveLogEntries();
-		//TODO: IFF stardate hasn't advanced (minute change) and/or button pressed, then we are just kind updating, but once a button has been pressed, with content unchanged, clean out the box.
-	});
+
+		//--Wire-up--//
+		const btn_record = document.getElementById("btn_record");
+		btn_record.addEventListener("click",(event)=>{
+			let l_stardate = new Date().toISOString().slice(0, 16).replace("T",".");
+			//recordLogEntry(stardate,document.getElementById("logentry").value);
+			recordLogEntry(l_stardate,document.getElementById("logentry").value);
+			retrieveLogEntries();
+			//TODO: IFF stardate hasn't advanced (minute change) and/or button pressed, then we are just kind updating, but once a button has been pressed, with content unchanged, clean out the box.
+			soundACK.play();
+		});
+		const btn_purge = document.getElementById("btn_purge");
+		btn_purge .addEventListener("click",(event)=>{
+			for(var lskey in localStorage) {
+				if (lskey.match("^shipslog\.")) {
+					let entry = localStorage[lskey];
+					console.log("DELETING FROM LOCAL STORAGE: " + lskey + " : " + entry);
+					localStorage.removeItem(lskey);
+				}
+			}
+			retrieveLogEntries();
+			soundNACK.play();
+		});
 	</script>
 	<script src="./howler.js"></script>
 	<script>//--UI kickstart--//
