@@ -14,6 +14,7 @@
 		<link rel="stylesheet" href="/snis-basic.css" type="text/css">
 	<style>
 		table.details{ margin-top:2em;}
+		ul li { margin-top: .5em; }
 		a.buttonize {
 			margin-bottom: .5em;
 			min-width: 12em;
@@ -30,7 +31,9 @@
 				<div class="panel">
 					<h1 onClick="toggleFullScreen();">UTILITIES</h1>
 				</div>
-				<p>This one is mostly client-side only "tools" and "utilities" that might be useful in conjunction with the game, but is not actually directly interacting with the CMD bridge or anything like that</p>
+				<div class="panel">
+					<p>This one is mostly client-side only "tools" and "utilities" that might be useful in conjunction with the game, but are not actually directly interacting with the CMD bridge or anything like that.</p>
+				</div>
 				<div>
 				<ul>
 					<li>
@@ -39,10 +42,11 @@
 					</li>
 					<li>
 						 <a id="a_launch_shipslog" href="./shipslog.html" class="buttonize">SHIP'S LOG</a>
-				actually allow "stardate" timstamping and record little messages and read them back. Allow download. If some kind of RSS-compliantness is woven in, there could also be a kind of "read remote ship's log" feature; possibly even useful for in-game plot reveals (e.g., COMMS, get me that derelict ship's log! aye captain, scanning now. got it, sending you the URL which captain pops into the remote log reader which retrieves onto the page )
+						Actually allow "stardate" timestamping and record little messages and read them back. Allow download. If some kind of RSS-compliantness is woven in, there could also be a kind of "read remote ship's log" feature; possibly even useful for in-game plot reveals (e.g., COMMS, get me that derelict ship's log! aye captain, scanning now. got it, sending you the URL which captain pops into the remote log reader which retrieves onto the page )
 					</li>
 					<li>
-						<button id="btn_cryptography" >CRYPTOGRAPHY</button> "decrypt" messages discovered in-game . Maybe also a protected secret keys vault, only the captain can unlock it, but it becomes necessary. ROT-13(x), Vigenère, RailFence, animated "decryption" routines.
+						<button id="btn_cryptography" >CRYPTOGRAPHY</button> 
+						"decrypt" messages discovered in-game . Maybe also a protected secret keys vault, only the captain can unlock it, but it becomes necessary. ROT-13(x), Vigenère, RailFence, animated "decryption" routines.
 					<li>
 						<button id="btn_cartography"  >CARTOGRAPHY</button> maybe a list of "Sectors" and a couple of SVGs for each major celestial bodies. would be cool to write some code to extract-and-generate from demon screen.
 					</li>
@@ -50,14 +54,16 @@
 						<button id="btn_mainscreen"  >MAINSCREEN</button> Simple mainscreen controls. Maybe instead of just "mainscreen" could be "bridge controls", so have a few other things like door locks, ambient lighting, second instance of RED ALERT button.
 					</li>
 					<li>
+						<button id="btn_accesscontrol"  >ACCESS CONTROL</button> Simple PIN-pad style pass-key entry. Could generically be put in front of "restricted access" physical doors, or high-security containers or arms controls/launch codes or whatever. Bonus: if a good pure client-side QR Code decoding library can be found, then a simple cheap tablet with webcam could also have a n access card/token functionality, too.
+					</li>
+					<li>
 				<button id="btn_encyclopedia" >ENCYCLOPEDIA/KNOWLEDGEBASE</button> indending to be in-game-knowledge and lore, hopefully useful to the game. maybe helps a player to be 'the expert on the Zarkonians" or whatever.
 					</li>
 					<li>
 				<button id="btn_8ball" >MAGIC 8 BALL/advice/humorous-chat-bot-replies-to-inquiries-to-the-galley/brig/head</button> (could use TTS for this last one, maybe)
 					</li>
-					</ul>
-				
-
+				</ul>
+				</div>
 
 
 				<div class="panel">

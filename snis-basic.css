@@ -460,6 +460,34 @@ input[type='range']:focus {
 
 
 
+/** Input Sinlge Line Text **/
+input[type='number'] {
+	font-family: 'Tomorrow', 'Orbitron', Arial, Helvetica, sans-serif;
+	font-size: 1.5em;
+	vertical-align: bottom;
+	color: #22DD22;
+	background-color: #020402;
+	border-top: 1px solid gray;
+	border-right: 1px solid gray;
+	border-bottom: 1px solid gray;
+	border-left: 1px solid gray;
+	border-radius: .2em;
+	padding: .25em 1em .25em 2em ;
+	text-align:left;
+	padding-top: .2em;
+	padding-left:.4em;
+	padding-right:.4em;
+	padding-bottom: .2em;
+	width:4em;
+}
+/* NOTE: sadly this part, for the up/down spinners, appears to not really work, yet. Shadow DOM, something something browser differences, etc. */
+input[type=number]::-webkit-inner-spin-button {
+/*	  -webkit-appearance: none;
+*/
+	color: #22DD22;
+	background-color: #020402;
+}
+
 /** Text Area **/
 
 textarea {
