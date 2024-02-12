@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>UTILITY - CRYPTOGRAPHY</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!--
+	  <link rel="stylesheet" href="/normalize.css" type="text/css">
+	  <link rel="stylesheet" href="/style.css" type="text/css">
+		-->
+		<link href="/blueprint.css" rel="stylesheet" />
+		<link href="/snis-blueprint.css" rel="stylesheet" />
+
+		<link rel="stylesheet" href="/snis-basic.css" type="text/css">
+	<style>
+		table.details{ margin-top:2em;}
+		a.buttonize {
+			margin-bottom: .5em;
+			min-width: 12em;
+			width: 12em;
+			display: block;
+			text-align: left;
+			margin-left: 1em;
+		}
+
+
+		textarea {
+			background-color: black;
+			background-color: #040408;
+		    color: #22DD22;
+			    font-family: 'Tomorrow', 'Orbitron', Arial, Helvetica, sans-serif;
+			font-size: 1.15em;
+
+			max-width: 100%;
+			line-height: 1.5;
+			border-radius: 5px;
+			border: 1px solid green;
+			/* box-shadow: 1px 1px 1px #999;*/
+		    display: block;
+			    margin:.5em;
+		}
+
+		label {
+		    display: block;
+			margin-bottom: .5em;
+		}
+		ul {
+			font-family:monospace;
+		}
+	</style>
+	</head>
+	<body>
+		<div id="main" bp="grid 6@md">
+			<div>
+				<div class="panel">
+					<h1 onClick="toggleFullScreen();">CRYPTOGRAPHY</h1>
+				</div>
+				<div class="panel">
+					<label for="ciphertext" id="ciphertext_label">CRYPTOGRAPHIC MODE: SYMMETRIC | STARDATE</label>
+					<textarea id="ciphertext" name="ciphertext" rows="12" cols="60"></textarea>
+					<button id="btn_decrypt">DECRYPT CIPHERTEXT</button> 
+				<ul>
+					<li> YYYY-MM-DD.HH:MI
+						<span id="YYYY-MM-DD.HH:MI">vcfhz yberz. Qbyerhz qryvevhz.</span>
+					</li>
+					<li> YYYY-MM-DD.HH:MI
+						<span id="reference_plaintext">ipsum lorem. Dolreum delirium.</span>
+					</li>
+				</ul>
+				<p id="tempdisplay">x</p>
+				
+
+
+
+				<div class="panel">
+					<!-- perhaps this should be a partialpage/client-injection (ajax'd into dom), or SSI, "navigation.nonsense.html_fragment" file ...-->
+					<!-- BEGIN CHUNK -->
+					<table class="details">
+						<tr><th>STATION ID</th><th>OPSEC CODE</th></tr>
+						<tr><td>01</td><td>0307</td></tr>
+						<tr><td>02</td><td>2600</td></tr>
+					</table>
+					<!-- END CHUNK -->
+				</div>
+				<div><a id="btn_main_menu" class="buttonize" href="menu.html">MAIN&nbsp;MENU</a></div>
+			</div>
+		</div>
+	</body>
+	<script>//--Utility Function definitions--//
+		function toggleFullScreen() {
+			if (!document.fullscreenElement) {
+				document.documentElement.requestFullscreen();
+			} else {
+				if (document.exitFullscreen) {
+					document.exitFullscreen();
+				}
+			}
+		}
+
+		function command(text) {
+			var data = { command: text };
+			//sanitize data?
+			console.info("Transmitting command: "+text);
+
+			//fetch('/SHIP/STATIONNAME/TARGETNOUN/VERB?parametername=value', {
+			fetch("/SHIP/NAVIGATION/" + text.toUpperCase().replace(" ","/"), {
+				method: 'POST', // or 'PUT'
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+			})
+			.then(response => response.json())
+			.then(data => {
+				console.log('Success:', data);
+				soundACK.play();
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+				soundNACK.play();
+			});
+		}
+
+		//TODO: something more robust? like json, or RSS-schema XML doc? update semantics?
+		function recordLogEntry(tag,text) {
+			localStorage["shipslog."+tag] = text;
+		}
+
+		function retrieveLogEntries(tag) {
+			let elDisplay = document.getElementById("tempdisplay");
+			if (tag) {
+				console.info("single entry retrieveal NOT IMPLEMENTED YET!");
+			} else {
+				for(var lskey in localStorage) {
+					if (lskey.match("^shipslog\.")) {
+						let entry = localStorage[lskey];
+						console.log(entry);
+						elDisplay.innerHTML+= "<span>"+lskey.replace("shipslog\.","")+"</span><br/>  "+entry;
+					}
+				}
+			}
+		}
+	//--Wire-up--//
+	const btn_decrypt = document.getElementById("btn_decrypt");
+	btn_decrypt.addEventListener("click",(event)=>{
+		decrypt_effect("ciphertext");
+		recordLogEntry(stardate,document.getElementById("ciphertext").value);
+	});
+	</script>
+	<script src="./crypto.js"></script>
+	<script src="./howler.js"></script>
+	<script>//--UI kickstart--//
+		var soundACK = new Howl({ src: ['./sounds/tactinput_acknowledge.ogg', './sounds/tactinput_acknowledge.m4a', './sounds/tactinput_acknowledge.webm'] });
+		var soundNACK = new Howl({ src: ['./sounds/tactinput_neg_acknowledge.ogg', './sounds/tactinput_neg_acknowledge.m4a', './sounds/tactinput_neg_acknowledge.webm'] });
+		try {
+			toggleFullScreen();
+		} catch (error) {
+			console.warn("just warning, kinda expected this..." + error);
+		}
+
+		//TODO: define and call a function to list/iterate over all stardate entries and apply to template.
+
+		var stardate = new Date().toISOString().slice(0, 16).replace("T",".");
+		retrieveLogEntries();
+		document.getElementById("ciphertext_label").innerText += " " + stardate;
+		//TODO: timer to update once per minute.
+		
+		//TODO: wire up a localstorage commit on btn_decrypt click
+		//possibly, this is "RSS" based internally. which would lead to other possibilities like a master daemonscreen/GM "rss feed subscription feed" 
+		// or maybe in-game, occasional access of another ship's log remotely (salvage/explore derelicts, espionage/"hacking" of active ships
+	</script>
+</html>
