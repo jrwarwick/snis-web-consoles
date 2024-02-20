@@ -7,15 +7,6 @@ Mostly this project is just taking advantage of the clever "/computer" command i
 
 Side-note: each game client's hostname suddenly becomes a potential URL. Or perhaps this bridge utility would only be running only on the server.
 
-A supplemental expansion to this project:
-Pi Pico W + GPIO + assorted electronics components 
-+ https://docs.circuitpython.org/en/latest/shared-bindings/digitalio/index.html 
-+ https://docs.circuitpython.org/en/latest/shared-bindings/mdns/index.html + https://docs.circuitpython.org/projects/requests/en/latest/api.html
-(or just an out-of-the-box Pi Zero W) 
-= fun and fancy physical control panel that takes advantage of this same bridge (because toggling a physical switch is read by pi gpio which then resolves snis-server.local and uses Requests library to send a "RESTful" CMD to the http_bridge process which feeds it to the fifo).
-
-But then again, Pi Pico has USB HID, so it can pretend to be a keyboard, which might be a /lot/ simpler than all that.
-
 
 references:
  - https://github.com/smcameron/space-nerds-in-space/blob/master/doc/hacking-space-nerds-in-space.html#guiwidget
@@ -61,9 +52,12 @@ Maybe also special target for audio asset symlinking
 ### main index.html that is also a menu 
 that lists all the client interfaces in a nice layout.
 
-also maybe some fun/cool QR code , Chirp, TTS, IRC/XMLPP broadcasts etc to announce/share/spawn/clone the "client UI" URL. 
+also maybe some fun/cool ~~QR code~~ , Chirp, TTS, IRC/XMLPP broadcasts etc to announce/share/spawn/clone the "client UI" URL. 
 At least dump it on the console or something. Linux/freedesktop "notify-send" maybe?  https://community.linuxmint.com/tutorial/view/2177
 https://specifications.freedesktop.org/notification-spec/notification-spec-latest.html
+
+### preprocessor static html generated from an apache SSI style refactor of a base template + per-station fragments
+but for all that is good and right, no nodejs or ruby or whatever.
 
 ### manifest.json & favicon stuff
 ```html
@@ -93,6 +87,21 @@ but look kinda cool. With graphs, animations and so on.
 	For Communications:  "INTERFERENCE MODULATOR PARAMETERS: [ 1273.23 887 3212.222 ]" "EMF PATTERN RECOGNIZER ALGORITHMS: QRF-Z (ALT7) XR3X"
 	For Weapons: "TARGETING LOCK COUNTERMEASURE/COMPENSATION" "EMF REFRACTION INDEX"
 maybe also a few actually kinda useful utilities, even though not strictly "game stuff". E.g., mini-SPA-app-features for: stopwatch/timer, calculator, rot13/viognere "decryptor", almanac-ish/quick-ref things (periodic table, universal constants & formulae, state transition temperatures for common materials, unit of measure conversions)
+
+### Reference implementation of hardware supplemental expansion to this project:
+Pi Pico W + GPIO + assorted electronics components 
++ https://docs.circuitpython.org/en/latest/shared-bindings/digitalio/index.html 
++ https://docs.circuitpython.org/en/latest/shared-bindings/mdns/index.html + https://docs.circuitpython.org/projects/requests/en/latest/api.html
+(or just an out-of-the-box Pi Zero W) 
+= fun and fancy physical control panel that takes advantage of this same bridge (because toggling a physical switch is read by pi gpio which then resolves snis-server.local and uses Requests library to send a "RESTful" CMD to the http_bridge process which feeds it to the fifo).
+
+But then again, Pi Pico has USB HID, so it can pretend to be a keyboard, which might be a /lot/ simpler than all that.
+
+### MISCELLANEOUS.html console which is mostly just a generic template
+paired with miscellanous.js which is a json object of button_label, URI pairs that are handlebar-style templated into the miscellaneous console, probably a prereq for webthings type stuff...
+
+### Webthings or similar web-service-ish interface
+if you have some of the set lighting, say some RGB strips wired up through a webthings.io gateway, then you could have a static json  file with a URI for brighter, URI for darker, URI for redder, etc.
 
 ### Game data from server (back to this web client)
 another bridging process? the same one? funky websockets implementation to "directly" get info from server (direct to webbrowser, that is)
@@ -130,7 +139,7 @@ but maybe all that is just too much baloney. a simple ISO standard YYYY-MM-DDTHH
 
 
 ## Screens
-(from https://smcameron.github.io/space-nerds-in-space/#controls)
+(Canonical, from https://smcameron.github.io/space-nerds-in-space/#controls)
 
  - F1 is the help screen. Actually might be kind of useful/cool to have an electronic/digital OPERATIONS REFERENCE MANUAL page. However it would have to be ToC style instead of displaying depends on which screen you're "on".
  - F2 - NAVIGATION
@@ -144,8 +153,8 @@ but maybe all that is just too much baloney. a simple ISO standard YYYY-MM-DDTHH
  - -- plus synthetic and/or secondary/companion screens:
  - Captain /CO (including ships log)
  - Commander /XO
- - Cartography/Library
- - Knowledgebase (like an on-board encyclopedia/almanac/dossiers/world-fact-book type of thing)
+ - Cartography
+ - Knowledgebase/Library (like an on-board encyclopedia/almanac/dossiers/world-fact-book type of thing)
  - Mining Bot Control and/or "Video Feed"
  - Manifest
  - Life Support
@@ -165,7 +174,6 @@ use the following keys to steer the ship:
                                     V
 - yaw the ship left and right, respectively.
 - pitch the ship down (forward) and up (back), respectively. (If you want to invert these, press Ctrl-I).
-
 - position of the camera in the 3D view, moving it closer or farther from the ship. Press it multiple times to cycle through several possible camera positions.
 + and - (plus and minus) and the mouse scroll wheel control the camera zoom level.
 - The vertical slider control on the upper right hand side of the screen is the ship's throttle. Use this to control how fast the ship moves.

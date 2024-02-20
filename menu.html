@@ -21,6 +21,18 @@
 			text-align: left;
 			margin-left: 1em;
 		}
+		#qrcode_launch {
+			padding:.5em;
+			margin:.5em;
+			width:65%;
+			border-top: 1px solid #22DD22;
+			border-right: 1px solid #22DD22;
+			border-bottom: 1px solid #22DD22;
+			border-left: 1px solid #22DD22;
+			border-radius: .2em;
+			background-color:#22dd22;
+		}
+
 	</style>
 	</head>
 	<body>
@@ -42,6 +54,7 @@
 						<tr><td>01</td><td>0307</td></tr>
 						<tr><td>02</td><td>2600</td></tr>
 					</table>
+					<div id="qrcode_launch"></div>
 					<!-- END CHUNK -->
 				</div>
 			</div>
@@ -92,5 +105,13 @@
 		} catch (error) {
 			console.warn("just warning, kinda expected this..." + error);
 		}
+	</script>
+	<script src="./qrcode.js"></script>
+	<script>
+		new QRCode(document.getElementById("qrcode_launch"), {
+			text: document.URL,
+			colorDark: "#111111",
+			colorLight: "#22DD22"
+		});
 	</script>
 </html>
