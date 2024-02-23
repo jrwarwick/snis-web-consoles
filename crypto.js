@@ -56,3 +56,70 @@ function decrypt_effect(elid) {
 }
 
 decrypt_effect("YYYY-MM-DD.HH:MI");
+
+function decrypt_effect2(elid) {
+	//TODO: rewrite this: have an array of integers that are index of "progress", one element for each letter in text. Randomly apply a random stepsize forward for a random selection of 
+	//character positions, until all all are all the way there. kind of looks like parallel threads of execution, kind of
+	let cseq = ['a','Z','3','8','5','u','R','K','0','2','T','s','J','x','L','b','q','7','6','#','h','H','1','v','N','N','X','5','-','9','G','g','+','B','F','s','A','w'];
+	let tgtxtEl=document.getElementById(elid)
+	let cryptxt = "";
+	let plaintxt = "";
+	if (tgtxtEl.tagName == "TEXTAREA") { //extract this into a get/set?
+		plaintxt = cryptxt = tgtxtEl.value;
+	} else {
+		plaintxt = cryptxt = tgtxtEl.innerText;
+	}
+	let decryptProgress = [];
+	for (let i = 0; i < cryptxt.length; i++) {
+		decryptProgress[i] = Math.floor(Math.random() * cseq.length);
+	}
+	let tgtxt= rot13(cryptxt);
+	if (tgtxtEl.tagName == "TEXTAREA") {
+		tgtxtEl.value = cryptxt;
+	} else {
+		tgtxtEl.innerText = cryptxt;
+	}
+	console.log(cryptxt);
+	let iteration = 0;
+	let maxIteration = 10000;
+	function progression() {
+		//"decrypt" just a portion of the message at a time, for effect
+		for (let i = 0; i < Math.max(2,Math.floor(cryptxt.length / 12)) ; i++) {
+			let charpos = Math.floor(Math.random() * cryptxt.length);
+			if (decryptProgress[charpos] ) {
+				decryptProgress[charpos] -= 1;
+			}
+		}
+		//console.log(txtInprogress);
+		if (!decryptProgress.join().match(/^[0,]+$/) && iteration < maxIteration) {
+			setTimeout(()=>{
+				let txtInprogress = "" 
+				for (let i = 0; i < cryptxt.length; i++) {
+					//actually this doesn't make sense, it is uniform character right before "success" txtInprogress += cseq[decryptProgress[i]];
+					if (decryptProgress[i]) {
+						txtInprogress += cseq[Math.floor(Math.random() * cseq.length)];
+					} else {
+						txtInprogress += plaintxt[i];
+					}
+				}
+				if (tgtxtEl.tagName == "TEXTAREA") {
+					tgtxtEl.value = txtInprogress;
+				} else {
+					tgtxtEl.innerText=txtInprogress;
+				}
+				//todo: a span with brighter color on the most recently decoded letter. "locked in"
+				if ((iteration % 200)==0) {
+					console.log(iteration);
+				}
+				progression();
+			},50+iteration / cryptxt.length + cryptxt.length / 10 / iteration);
+			//},100+iteration*(500/cseq.length));
+		}
+		iteration += 1;
+	}
+	progression();
+
+	//TODO:finish up flash-confirm looking thing for the whole line. and a "decryption complete" message/tone/etc.
+}
+
+decrypt_effect("YYYY-MM-DD.HH:MI");

@@ -59,6 +59,7 @@
 					<label for="ciphertext" id="ciphertext_label">CRYPTOGRAPHIC MODE: SYMMETRIC | STARDATE</label>
 					<textarea id="ciphertext" name="ciphertext" rows="12" cols="60"></textarea>
 					<button id="btn_decrypt">DECRYPT CIPHERTEXT</button> 
+					<button id="btn_decrypt2">ENHANCED DECRYPT</button> 
 				<ul>
 					<li> YYYY-MM-DD.HH:MI
 						<span id="YYYY-MM-DD.HH:MI">vcfhz yberz. Qbyerhz qryvevhz.</span>
@@ -144,6 +145,11 @@
 	const btn_decrypt = document.getElementById("btn_decrypt");
 	btn_decrypt.addEventListener("click",(event)=>{
 		decrypt_effect("ciphertext");
+		recordLogEntry(stardate,document.getElementById("ciphertext").value);
+	});
+	const btn_decrypt2 = document.getElementById("btn_decrypt2");
+	btn_decrypt2.addEventListener("click",(event)=>{
+		decrypt_effect2("ciphertext");
 		recordLogEntry(stardate,document.getElementById("ciphertext").value);
 	});
 	</script>
