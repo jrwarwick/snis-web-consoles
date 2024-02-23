@@ -8,11 +8,14 @@
 	  <link rel="stylesheet" href="/normalize.css" type="text/css">
 	  <link rel="stylesheet" href="/style.css" type="text/css">
 		-->
-		<link href="/blueprint.css" rel="stylesheet" />
-		<link href="/snis-blueprint.css" rel="stylesheet" />
+		<link rel="stylesheet" href="/grid.css" type="text/css">
+		<link rel="stylesheet" href="/screen.css" type="text/css">
 		<link rel="stylesheet" href="/snis-basic.css" type="text/css">
 	<style>
 		table.details{ margin-top:2em;}
+
+body { padding:.5em;}
+/*
 		a.buttonize {
 			margin-bottom: .5em;
 			min-width: 12em;
@@ -21,31 +24,49 @@
 			text-align: left;
 			margin-left: 1em;
 		}
-		#qrcode_launch {
-			padding:.5em;
-			margin:.5em;
-			width:65%;
-			border-top: 1px solid #22DD22;
-			border-right: 1px solid #22DD22;
-			border-bottom: 1px solid #22DD22;
-			border-left: 1px solid #22DD22;
-			border-radius: .2em;
-			background-color:#22dd22;
-		}
+*/
+ul.stack {
+	font-size:1.25em;
+	list-style-type:none;
+	padding-left:0em; margin-bottom:1em;
+	text-align:left;
+}
+ul.stack > li{
+	margin-bottom: .5em;
+}
+ul.stack > li > a.buttonize {
+	max-width:12em;
+	display:block;
+	text-align:left;
+}
 
+		#qrcode_launch {
+			width:55%;
+			max-width:25em;
+			padding:.75em;
+			margin:.25em;
+			border-top: 1px solid #20ca20;
+			border-right: 1px solid #20ca20;
+			border-bottom: 1px solid #20ca20;
+			border-left: 1px solid #20ca20;
+			border-radius: .2em;
+			background-color:#20cc22;
+		}
 	</style>
 	</head>
 	<body>
-		<div id="main" bp="grid">
+		<div id="main" >
 			<div>
 				<div class="panel">
 					<h1 onClick="toggleFullScreen();">MAIN MENU</h1>
 				</div>
-				<a id="a_launch_nav" href="./navigation.html" class="buttonize">NAVIGATION</a>
-				<a id="a_launch_sci" href="./science.html" class="buttonize">SCIENCE</a>
-				<a id="a_launch_wep" href="./weapons.html" class="buttonize">WEAPONS</a>
-				<a id="a_launch_comm" href="./communications.html" class="buttonize">COMMUNICATIONS</a>
-				<a id="a_launch_comm" href="./utilities.html" class="buttonize">UTILIIES</a>
+				<ul class="stack">
+					<li><a id="a_launch_nav" href="./navigation.html" class="buttonize">NAVIGATION</a></li>
+					<li><a id="a_launch_sci" href="./science.html" class="buttonize">SCIENCE</a></li>
+					<li><a id="a_launch_wep" href="./weapons.html" class="buttonize">WEAPONS</a></li>
+					<li><a id="a_launch_comm" href="./communications.html" class="buttonize">COMMUNICATIONS</a></li>
+					<li><a id="a_launch_comm" href="./utilities.html" class="buttonize">UTILIIES</a></li>
+				</ul>
 				<div class="panel">
 					<!-- perhaps this should be a partialpage/client-injection (ajax'd into dom), or SSI, "navigation.nonsense.html_fragment" file ...-->
 					<!-- BEGIN CHUNK -->
@@ -111,7 +132,7 @@
 		new QRCode(document.getElementById("qrcode_launch"), {
 			text: document.URL,
 			colorDark: "#111111",
-			colorLight: "#22DD22"
-		});
+			colorLight: "#20cc20",
+			output: "svg" });
 	</script>
 </html>
