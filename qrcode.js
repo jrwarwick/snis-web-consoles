@@ -195,12 +195,13 @@ var QRCode;
 				return el;
 			}
 
-			var svg = makeSVG("svg" , {'viewBox': '0 0 ' + String(nCount) + " " + String(nCount), 'width': '100%', 'height': '100%', 'fill': _htOption.colorLight});
+			var svg = makeSVG("svg" , {'viewBox': '0 0 ' + String(nCount + 2 * _htOption.border) + " " + String(nCount + 2 * _htOption.border), 'width': '100%', 'height': '100%', 'fill': _htOption.colorLight, 'shape-rendering': 'crispEdges'});
+
 			svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
 			_el.appendChild(svg);
 
 			svg.appendChild(makeSVG("rect", {"fill": _htOption.colorLight, "width": "100%", "height": "100%"}));
-			svg.appendChild(makeSVG("rect", {"fill": _htOption.colorDark, "width": "1", "height": "1", "id": "template"}));
+			svg.appendChild(makeSVG("rect", {"fill": _htOption.colorDark, "x": String(_htOption.border), "y": String(_htOption.border), "width": "1", "height": "1", "id": "template"}));
 
 			for (var row = 0; row < nCount; row++) {
 				for (var col = 0; col < nCount; col++) {
@@ -215,6 +216,9 @@ var QRCode;
 		Drawing.prototype.clear = function () {
 			while (this._el.hasChildNodes())
 				this._el.removeChild(this._el.lastChild);
+		};
+		Drawing.prototype.destruct = function () {
+			this.clear(); // removes all child nodes including svg root
 		};
 		return Drawing;
 	})();
@@ -240,16 +244,45 @@ var QRCode;
 			var nHeight = Math.floor(_htOption.height / nCount);
 			var aHTML = ['<table style="border:0;border-collapse:collapse;">'];
 			
+			for (var row = 0; row < _htOption.border; row++) {
+				aHTML.push('<tr>');
+				
+				for (var col = 0; col < nCount + 2 * _htOption.border; col++) {
+					aHTML.push('<td style="border:0;border-collapse:collapse;padding:0;margin:0;width:' + nWidth + 'px;height:' + nHeight + 'px;background-color:' + _htOption.colorLight + ';"></td>');
+				}
+				
+				aHTML.push('</tr>');
+			}
+
+			
 			for (var row = 0; row < nCount; row++) {
 				aHTML.push('<tr>');
+				
+				for (var col = 0; col < _htOption.border; col++) {
+					aHTML.push('<td style="border:0;border-collapse:collapse;padding:0;margin:0;width:' + nWidth + 'px;height:' + nHeight + 'px;background-color:' + _htOption.colorLight + ';"></td>');
+				}
 				
 				for (var col = 0; col < nCount; col++) {
 					aHTML.push('<td style="border:0;border-collapse:collapse;padding:0;margin:0;width:' + nWidth + 'px;height:' + nHeight + 'px;background-color:' + (oQRCode.isDark(row, col) ? _htOption.colorDark : _htOption.colorLight) + ';"></td>');
 				}
 				
+				for (var col = 0; col < _htOption.border; col++) {
+					aHTML.push('<td style="border:0;border-collapse:collapse;padding:0;margin:0;width:' + nWidth + 'px;height:' + nHeight + 'px;background-color:' + _htOption.colorLight + ';"></td>');
+				}
+				
 				aHTML.push('</tr>');
 			}
 			
+			for (var row = 0; row < _htOption.border; row++) {
+				aHTML.push('<tr>');
+				
+				for (var col = 0; col < nCount + 2 * _htOption.border; col++) {
+					aHTML.push('<td style="border:0;border-collapse:collapse;padding:0;margin:0;width:' + nWidth + 'px;height:' + nHeight + 'px;background-color:' + _htOption.colorLight + ';"></td>');
+				}
+				
+				aHTML.push('</tr>');
+			}
+
 			aHTML.push('</table>');
 			_el.innerHTML = aHTML.join('');
 			
@@ -268,6 +301,9 @@ var QRCode;
 		 */
 		Drawing.prototype.clear = function () {
 			this._el.innerHTML = '';
+		};
+		Drawing.prototype.destruct = function () {
+			this.clear(); // removes all child nodes including svg root
 		};
 		
 		return Drawing;
@@ -380,14 +416,25 @@ var QRCode;
             var _htOption = this._htOption;
             
 			var nCount = oQRCode.getModuleCount();
-			var nWidth = _htOption.width / nCount;
-			var nHeight = _htOption.height / nCount;
+			var nWidth = _htOption.width / (nCount + 2 * _htOption.border);
+			var nHeight = _htOption.height / (nCount + 2 * _htOption.border);
+			var nBorderWidth = _htOption.border * nWidth;
+			var nBorderHeight = _htOption.border * nHeight;
 			var nRoundedWidth = Math.round(nWidth);
 			var nRoundedHeight = Math.round(nHeight);
 
 			_elImage.style.display = "none";
 			this.clear();
 			
+            // Fill quiet zone with light color
+            _oContext.strokeStyle = _htOption.colorLight;
+            _oContext.lineWidth = 1;
+            _oContext.fillStyle = _htOption.colorLight;					
+            _oContext.fillRect(0, 0, _htOption.width, nBorderHeight);
+            _oContext.fillRect(0, _htOption.height - nBorderHeight, _htOption.width, _htOption.height);
+            _oContext.fillRect(0, nBorderHeight, nBorderWidth, _htOption.height - nBorderHeight);
+            _oContext.fillRect(_htOption.width - nBorderWidth, nBorderHeight, _htOption.width, _htOption.height - nBorderHeight);
+
 			for (var row = 0; row < nCount; row++) {
 				for (var col = 0; col < nCount; col++) {
 					var bIsDark = oQRCode.isDark(row, col);
@@ -396,19 +443,19 @@ var QRCode;
 					_oContext.strokeStyle = bIsDark ? _htOption.colorDark : _htOption.colorLight;
 					_oContext.lineWidth = 1;
 					_oContext.fillStyle = bIsDark ? _htOption.colorDark : _htOption.colorLight;					
-					_oContext.fillRect(nLeft, nTop, nWidth, nHeight);
+					_oContext.fillRect(nLeft + nBorderWidth, nTop + nBorderHeight, nWidth, nHeight);
 					
 					// 안티 앨리어싱 방지 처리
 					_oContext.strokeRect(
-						Math.floor(nLeft) + 0.5,
-						Math.floor(nTop) + 0.5,
+						Math.floor(nLeft + nBorderWidth) + 0.5,
+						Math.floor(nTop + nBorderHeight) + 0.5,
 						nRoundedWidth,
 						nRoundedHeight
 					);
 					
 					_oContext.strokeRect(
-						Math.ceil(nLeft) - 0.5,
-						Math.ceil(nTop) - 0.5,
+						Math.ceil(nLeft + nBorderWidth) - 0.5,
+						Math.ceil(nTop + nBorderHeight) - 0.5,
 						nRoundedWidth,
 						nRoundedHeight
 					);
@@ -437,11 +484,20 @@ var QRCode;
 		};
 		
 		/**
-		 * Clear the QRCode
+		 * Paints the canvas white, ignores the alt image
 		 */
 		Drawing.prototype.clear = function () {
 			this._oContext.clearRect(0, 0, this._elCanvas.width, this._elCanvas.height);
 			this._bIsPainted = false;
+		};
+		
+		/**
+		 * Destruct the QRCode to create a new one with different drawing method on the same element.
+		 * removes all child nodes including canvas and img tag
+		 */
+		Drawing.prototype.destruct = function () {
+			while (this._el.hasChildNodes())
+				this._el.removeChild(this._el.lastChild);
 		};
 		
 		/**
@@ -529,6 +585,7 @@ var QRCode;
 	 * @param {String} vOption.text QRCode link data
 	 * @param {Number} [vOption.width=256]
 	 * @param {Number} [vOption.height=256]
+	 * @param {Number} [vOption.border=4] default to 4 modules
 	 * @param {String} [vOption.colorDark="#000000"]
 	 * @param {String} [vOption.colorLight="#ffffff"]
 	 * @param {QRCode.CorrectLevel} [vOption.correctLevel=QRCode.CorrectLevel.H] [L|M|Q|H] 
@@ -537,6 +594,7 @@ var QRCode;
 		this._htOption = {
 			width : 256, 
 			height : 256,
+			border: 4,
 			typeNumber : 4,
 			colorDark : "#000000",
 			colorLight : "#ffffff",
@@ -581,18 +639,27 @@ var QRCode;
 		this._oDrawing = new Drawing(this._el, this._htOption);
 		
 		if (this._htOption.text) {
-			this.makeCode(this._htOption.text);	
+			this.setCode(this._htOption.text);	
 		}
 	};
 	
 	/**
 	 * Make the QRCode
 	 * 
-	 * @param {String} sText link data
+	 * @param {String} DEPRECATED SEE setCode(sText)
 	 */
 	QRCode.prototype.makeCode = function (sText) {
+	    this.setCode(sText);
+	};
+	
+	/**
+	 * Reset the QR-code content and redraw the code.
+	 * 
+	 * @param {String} sText link data
+	 */
+	QRCode.prototype.setCode = function (sText) {
 		this._oQRCode = new QRCodeModel(_getTypeNumber(sText, this._htOption.correctLevel), this._htOption.correctLevel);
-		this._oQRCode.addData(sText);
+		this._oQRCode.addData(sText); // does not addData but setData or reset the content
 		this._oQRCode.make();
 		this._el.title = sText;
 		this._oDrawing.draw(this._oQRCode);			
@@ -613,10 +680,17 @@ var QRCode;
 	};
 	
 	/**
-	 * Clear the QRCode
+	 * Clear the QRCode, make it white, but does not remove canvas or png elenemts
 	 */
 	QRCode.prototype.clear = function () {
 		this._oDrawing.clear();
+	};
+	
+	/**
+	 * Remove all created elements, so you can create a new QRCode on the original element
+	 */
+	QRCode.prototype.destruct = function () {
+		this._oDrawing.destruct();
 	};
 	
 	/**
