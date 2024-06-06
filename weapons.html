@@ -14,11 +14,11 @@
 	  <link rel="stylesheet" href="/normalize.css" type="text/css">
 	  <link rel="stylesheet" href="/style.css" type="text/css">
 		-->
-		<link href="/blueprint.css" rel="stylesheet" />
-		<link href="/snis-blueprint.css" rel="stylesheet" />
+		<link href="./blueprint.css" rel="stylesheet" />
+		<link href="./snis-blueprint.css" rel="stylesheet" />
 
-		<link rel="stylesheet" href="/snis-basic.css" type="text/css">
-		<link rel="stylesheet" href="/snis-radar.css" type="text/css">
+		<link href="./snis-basic.css" rel="stylesheet" type="text/css" />
+		<link href="./snis-radar.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
 		<div class="panel">
@@ -144,10 +144,12 @@
 			var col = Math.floor(Math.random() * 3) + 1;
 			var dd = document.querySelector("body > div:nth-child(3) > div.panel > table > tbody > tr:nth-child("+row+") > td:nth-child("+col+")");
 			dd.innerText = (Math.floor(dd.innerText) * Math.floor(Math.random() * 99) ) % 999 + (Math.floor(Math.random() * 100)/10);
+			//TODO: try to read optional data-min and data-max attributes to keep it sane and/or configurable
+			//TODO: chance of follow-on minor increment
 			//quasi-recursion
 			var tmr = setTimeout(function() {
 				faux_mutation();
-			},1000*Math.floor(Math.random() * 12));
+			},800*Math.floor(Math.random() * 10));
 		}
 		function faux_highlight() {
 			var row = Math.floor(Math.random() * 2) + 2;
