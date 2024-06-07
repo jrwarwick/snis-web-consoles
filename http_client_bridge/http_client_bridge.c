@@ -52,11 +52,11 @@ static int insert_fifo_message(char *message)
 		return 1;
 	}
 
-	int offset = strlen("/SHIP/");
-	int i = offset;
-
-	for (i = offset; i <= (int)strlen(message) ; i++) {
-		clean_message[i - offset] = (message[i] == '/') ? ' ' : toupper(message[i]);
+	/* a little bit of extra clean up just in case string is still a bit URI-ish, and normalization*/
+	/* consider: + _ %20 */
+	int i = 0;
+	for (i = 0; i <= (int)strlen(message) ; i++) {
+		clean_message[i] = (message[i] == '/') ? ' ' : toupper(message[i]);
 	}
 	clean_message[i+1] = '\n';
 	clean_message[i+2] = '\0';
@@ -108,15 +108,29 @@ static void request_handler(struct mg_connection *c, int ev, void *ev_data, void
 			 */
 			snprintf(control_spec, (int)hm->uri.len+1, hm->uri.ptr, "(%s)\n");
 			fprintf(stdout, "  [CMD]:%s\n", control_spec);
-
-			insert_fifo_message(control_spec);
+			char *cmdtoken, *saveptr;
+			cmdtoken = strtok_r(control_spec, "/", &saveptr); /* first one is always SHIP */
+			cmdtoken = strtok_r(saveptr, "/", &saveptr); 
+			if (strcmp(cmdtoken,"NAVIGATION")==0) {
+				fprintf(stdout, "      :%s\n", saveptr);
+				for (int i = 0; i < strlen(saveptr); i++) {
+					if (saveptr[i] == '/') {
+						saveptr[i]=' ';
+					}
+				}
+				snprintf(control_spec, strlen(saveptr)+strlen(" 10 degrees")+1,"%s 10 degrees", saveptr);
+				fprintf(stdout, "     xlated:%s\n", control_spec);
+				insert_fifo_message(saveptr);
+			} else {
+				fprintf(stdout, "tkn:%s\n", saveptr);
+				insert_fifo_message(control_spec);
+			}
 			mg_http_reply(c, 200, "", "{\"command\": \"%.*s\",\"result\": \"ACK\"}\n",
 					(int) hm->uri.len, hm->uri.ptr);
 		} else {
 			struct mg_http_serve_opts opts = {.root_dir = s_root_dir};
 
 			mg_http_serve_dir(c, ev_data, &opts);
-
 			if (hm->uri.ptr) {
 				snprintf(control_spec, (int)hm->uri.len + 1, hm->uri.ptr, "(%s)\n");
 				fprintf(stdout, "  static srv:%s\n", control_spec);
