@@ -12,7 +12,22 @@
 		<link href="./snis-blueprint.css" rel="stylesheet" />
 		-->
 		<link href="./snis-basic.css" rel="stylesheet" />
+		<link rel="stylesheet" media="screen" href="https://fontlibrary.org/en/face/web-3-of-9-ascii" type="text/css"/>
 	<style>
+#barcoded {
+	   	font-family: 'Web3Of9ASCIIRegular';
+	   	font-weight: normal;
+	   	font-style: normal;
+		font-size:1.25em;
+		 transform: rotate(90deg) scale(1,.45);
+
+		     position: relative;
+		         float: right;
+			     display: inline-block;
+			         right: 1em;
+				     top: 8em;
+		 
+}
 		table.details{ margin-top:2em;}
 		a.buttonize {
 			margin-bottom: .5em;
@@ -54,6 +69,7 @@
 				</div>
 				<div class="panel">
 					<p id="stardate">STARDATE: &nbsp; </p>
+						<p id="barcoded">--:--:--</p>
 					<div id="clockontainer">
 						<h1>MISSION TIME</h1>
 						<canvas id="analogClock" width="102" height="102">Clock</canvas>
@@ -164,6 +180,7 @@ function setupAnalogClock(canvas, clockWidth) {
 	var digital = document.getElementById("digitalClock");
 	var stopwatch = document.getElementById("digitalStopwatch");
 	var countdown = document.getElementById("digitalCountdown");
+	var barcoded  = document.getElementById("barcoded");
 
 	function tick() {
 		var date = new Date();
@@ -186,6 +203,7 @@ function setupAnalogClock(canvas, clockWidth) {
 		drawHand(clockWidth/2, seconds * 6);
 
 		digital.innerText = ("0"+hours).slice(-2)+":"+("0"+minutes).slice(-2)+":"+("0"+seconds).slice(-2);
+		barcoded.innerText = stardate.split(".")[0].replaceAll("-","") + ("0"+hours).slice(-2)+("0"+minutes).slice(-2)+("0"+seconds).slice(-2);
 		if (sinceTimeZero) {
 			stopwatch.innerText = ("0"+Math.floor(sinceTimeZero / 360)).slice(-2) + ":" + ("0"+Math.floor(sinceTimeZero / 60)).slice(-2) + ":" + ("0"+sinceTimeZero % 60).slice(-2);
 			sinceTimeZero += 1;
